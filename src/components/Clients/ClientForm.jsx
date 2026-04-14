@@ -19,7 +19,9 @@ export default function ClientForm({ onAddClient, onClose }) {
       <input type="email" name="email" id="email" required />
 
       <button type="submit">Submit</button>
-      <button onClick={onClose}>Cancel</button>
+      <button type="button" onClick={onClose}>
+        Cancel
+      </button>
     </form>
   );
 }

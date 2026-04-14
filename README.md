@@ -36,3 +36,5 @@ Work in progress — currently building:
 ---
 
 This project is part of my journey to become job-ready in frontend development by building real-world applications and strengthening my understanding of React.
+
+This repository will be updated continuously as I improve the app and add more features.

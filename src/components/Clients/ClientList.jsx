@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ClientForm from "./ClientForm.jsx";
 import ProjectForm from "../Projects/ProjectForm.jsx";
+import TaskForm from "../Tasks/TaskForm.jsx";
 
 export default function Client({
   clients,
@@ -12,6 +13,9 @@ export default function Client({
   isAddingProject,
   onOpenProjectForm,
   onCloseProjectForm,
+  onSelectProject,
+  activeProjectId,
+  onAddTask,
 }) {
   const [isAdding, setIsAdding] = useState(false); // Handling Client Form state
 
@@ -64,9 +68,35 @@ export default function Client({
             <p>No project in the list</p>
           ) : (
             <ul>
-              {selectedClient.projects.map((project) => (
-                <li key={project.id}>{project.title}</li>
-              ))}
+              {selectedClient.projects.map((project) => {
+                return (
+                  <li key={project.id}>
+                    <h3>{project.title}</h3>
+
+                    <button onClick={() => onSelectProject(project.id)}>
+                      Add task
+                    </button>
+
+                    {project.tasks.length === 0 && <p>No task yet</p>}
+                    {project.tasks.length > 0 && (
+                      <h5>{project.tasks.length === 1 ? "Task:" : "Tasks:"}</h5>
+                    )}
+
+                    <ul>
+                      {project.tasks.map((task) => (
+                        <li key={task.id}>{task.desc}</li>
+                      ))}
+                    </ul>
+
+                    {project.id === activeProjectId && (
+                      <TaskForm
+                        onAddTask={onAddTask}
+                        onClose={() => onSelectProject(project.id)}
+                      />
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           )}
 
