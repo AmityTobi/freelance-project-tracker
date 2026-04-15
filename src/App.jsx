@@ -51,6 +51,33 @@ function App() {
     );
   }
 
+  //Delete Project
+  function handleDeleteProject(projectId) {
+    setClients((prevState) =>
+      prevState.map((client) => {
+        if (client.id === selectedClientId) {
+          return {
+            ...client,
+            projects: client.projects.filter(
+              (project) => project.id !== projectId,
+            ),
+          };
+        }
+
+        return client;
+      }),
+    );
+
+    // cleanup AFTER
+    if (projectId === selectedProjectId) {
+      setSelectedProjectId(null);
+    }
+
+    if (projectId === activeProjectId) {
+      setActiveProjectId(null);
+    }
+  }
+
   // Add Task to project
   function handleAddTask(taskData) {
     setClients((prevState) => {
@@ -164,6 +191,7 @@ function App() {
         onAddTask={handleAddTask}
         onToggleTask={handleToggleTask}
         onDeleteTask={handleDeleteTask}
+        onDeleteProject={handleDeleteProject}
       />
     </>
   );

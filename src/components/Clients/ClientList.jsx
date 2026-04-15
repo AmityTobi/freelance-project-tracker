@@ -18,6 +18,7 @@ export default function Client({
   onAddTask,
   onToggleTask,
   onDeleteTask,
+  onDeleteProject,
 }) {
   const [isAdding, setIsAdding] = useState(false); // Handling Client Form state
 
@@ -74,6 +75,9 @@ export default function Client({
                 return (
                   <li key={project.id}>
                     <h3>{project.title}</h3>
+                    <button onClick={() => onDeleteProject(project.id)}>
+                      Delete
+                    </button>
 
                     <button onClick={() => onSelectProject(project.id)}>
                       Add task
@@ -96,8 +100,12 @@ export default function Client({
                           }}
                         >
                           {task.desc}
+
                           <button
-                            onClick={() => onDeleteTask(project.id, task.id)}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              onDeleteTask(project.id, task.id);
+                            }}
                           >
                             Delete
                           </button>
