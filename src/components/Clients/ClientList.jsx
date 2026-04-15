@@ -17,6 +17,7 @@ export default function Client({
   activeProjectId,
   onAddTask,
   onToggleTask,
+  onDeleteTask,
 }) {
   const [isAdding, setIsAdding] = useState(false); // Handling Client Form state
 
@@ -95,6 +96,11 @@ export default function Client({
                           }}
                         >
                           {task.desc}
+                          <button
+                            onClick={() => onDeleteTask(project.id, task.id)}
+                          >
+                            Delete
+                          </button>
                         </li>
                       ))}
                     </ul>

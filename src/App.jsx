@@ -103,6 +103,27 @@ function App() {
     });
   }
 
+  // Delete task
+  function handleDeleteTask(projectId, taskId) {
+    setClients((prevState) => {
+      return prevState.map((client) => {
+        if (client.id !== selectedClientId) return client;
+
+        return {
+          ...client,
+          projects: client.projects.map((project) => {
+            if (project.id !== projectId) return project;
+
+            return {
+              ...project,
+              tasks: project.tasks.filter((task) => task.id !== taskId),
+            };
+          }),
+        };
+      });
+    });
+  }
+
   // Set client-ID
   function handleSelectClient(id) {
     setSelectedClientId(id);
@@ -142,6 +163,7 @@ function App() {
         activeProjectId={activeProjectId}
         onAddTask={handleAddTask}
         onToggleTask={handleToggleTask}
+        onDeleteTask={handleDeleteTask}
       />
     </>
   );
