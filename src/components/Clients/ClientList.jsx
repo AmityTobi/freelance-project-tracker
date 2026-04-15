@@ -16,6 +16,7 @@ export default function Client({
   onSelectProject,
   activeProjectId,
   onAddTask,
+  onToggleTask,
 }) {
   const [isAdding, setIsAdding] = useState(false); // Handling Client Form state
 
@@ -84,7 +85,17 @@ export default function Client({
 
                     <ul>
                       {project.tasks.map((task) => (
-                        <li key={task.id}>{task.desc}</li>
+                        <li
+                          key={task.id}
+                          onClick={() => onToggleTask(task.id)}
+                          style={{
+                            textDecoration: task.completed
+                              ? "line-through"
+                              : "none",
+                          }}
+                        >
+                          {task.desc}
+                        </li>
                       ))}
                     </ul>
 

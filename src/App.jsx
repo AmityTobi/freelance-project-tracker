@@ -6,8 +6,11 @@ function App() {
   const [clients, setClients] = useState([]);
   const [selectedClientId, setSelectedClientId] = useState(null);
 
-  // Check active projectId
+  // Check active projectId & never resets to null
   const [selectedProjectId, setSelectedProjectId] = useState(null);
+
+  // Toggles open/closed
+  const [activeProjectId, setActiveProjectId] = useState(null);
 
   // Handling Project Form state
   const [isAddingProject, setIsAddingProject] = useState(false);
@@ -22,7 +25,7 @@ function App() {
       ...prevState,
       {
         id: crypto.randomUUID(),
-        ...clientData, //User data from form
+        ...clientData, //Client data from form
         projects: [],
       },
     ]);
@@ -72,6 +75,34 @@ function App() {
     });
   }
 
+  // Toggle task completed
+  function handleToggleTask(taskId) {
+    setClients((prevState) => {
+      return prevState.map((client) => {
+        if (client.id !== selectedClientId) return client;
+
+        return {
+          ...client,
+          projects: client.projects.map((project) => {
+            if (project.id !== selectedProjectId) return project;
+
+            return {
+              ...project,
+              tasks: project.tasks.map((task) => {
+                if (task.id !== taskId) return task;
+
+                return {
+                  ...task,
+                  completed: !task.completed,
+                };
+              }),
+            };
+          }),
+        };
+      });
+    });
+  }
+
   // Set client-ID
   function handleSelectClient(id) {
     setSelectedClientId(id);
@@ -80,9 +111,9 @@ function App() {
 
   // Toggle Task-Form display
   function handleSelectTaskId(id) {
-    selectedProjectId === id
-      ? setSelectedProjectId(null)
-      : setSelectedProjectId(id);
+    setSelectedProjectId(id);
+
+    activeProjectId === id ? setActiveProjectId(null) : setActiveProjectId(id);
   }
 
   // Open project form
@@ -108,8 +139,9 @@ function App() {
         onOpenProjectForm={handleOpenProjectForm}
         onCloseProjectForm={handleCloseProjectForm}
         onSelectProject={handleSelectTaskId}
-        activeProjectId={selectedProjectId}
+        activeProjectId={activeProjectId}
         onAddTask={handleAddTask}
+        onToggleTask={handleToggleTask}
       />
     </>
   );
