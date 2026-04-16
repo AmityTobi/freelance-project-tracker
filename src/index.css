@@ -1,80 +1,435 @@
-body {
+/* ===== FONT ===== */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Syne:wght@600;700&display=swap");
+
+/* ===== RESET ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #0f172a;
-  color: white;
-}
-
-/* Layout */
-main {
-  max-width: 600px;
-  margin: 3rem auto;
-  padding: 2rem;
-  background-color: #1e293b;
-  border-radius: 12px;
-}
-
-/* Heading */
-h1 {
-  margin-bottom: 0.5rem;
-}
-
-/* List */
-ul {
-  list-style: none;
   padding: 0;
-  margin: 1.5rem 0;
 }
 
-/* List item */
-li {
-  padding: 0.8rem 1rem;
-  margin-bottom: 0.5rem;
-  background-color: #334155;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+/* ===== BASE ===== */
+body {
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  background-color: #080c14;
+  color: #cbd5e1;
+  min-height: 100vh;
+  line-height: 1.6;
 }
 
-/* Hover effect */
-li:hover {
-  background-color: #475569;
+/* ===== APP LAYOUT ===== */
+.app-layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px;
 }
 
-/* Active (selected client) */
-.active {
-  background-color: #22c55e;
-  color: #022c22;
-  font-weight: bold;
+/* ===== APP HEADER ===== */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
 }
 
-/* Button */
-button {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  background-color: #22c55e;
-  color: #022c22;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.app-logo {
+  font-family: "Syne", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #3b82f6;
+  background: #0f1e38;
+  border: 1px solid #1e3a5f;
+  padding: 5px 10px;
+  border-radius: 6px;
 }
 
-button:hover {
-  background-color: #16a34a;
+.app-title {
+  font-family: "Syne", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f5f9;
+  letter-spacing: -0.2px;
 }
 
-/* Form */
-form {
-  margin-top: 1.5rem;
+/* ===== LAYOUT CONTAINER ===== */
+.layout-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* ===== SECTION LABEL ===== */
+.section-label {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+/* ===== CLIENT SIDEBAR ===== */
+.client-section {
+  width: 230px;
+  flex-shrink: 0;
+  background: #0d1117;
+  border: 1px solid #161d2b;
+  border-radius: 14px;
+  padding: 18px;
+  position: sticky;
+  top: 24px;
+}
+
+.empty-hint {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+
+/* ===== CLIENT LIST ===== */
+.client-list {
+  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 3px;
+  margin-bottom: 14px;
+}
+
+.client-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.client-item:hover {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+.client-item.active {
+  background: #0f1e38;
+  border-color: #1e3a5f;
+  color: #93c5fd;
+}
+
+.client-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #1e3a5f;
+  color: #60a5fa;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.client-item.active .client-avatar {
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.client-name {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== MAIN SECTION ===== */
+.main-section {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.empty-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+.empty-state p {
+  font-size: 14px;
+}
+
+/* ===== CLIENT HEADER ===== */
+.client-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #161d2b;
+}
+
+.client-heading {
+  font-family: "Syne", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f1f5f9;
+  letter-spacing: -0.3px;
+}
+
+/* ===== PROJECT LIST ===== */
+.project-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.project-card {
+  background: #0d1117;
+  border: 1px solid #161d2b;
+  border-radius: 14px;
+  padding: 18px;
+  transition: border-color 0.2s;
+}
+
+.project-card:hover {
+  border-color: #1e293b;
+}
+
+/* ===== PROJECT HEADER ===== */
+.project-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.project-title {
+  font-family: "Syne", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: -0.2px;
+}
+
+.project-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* ===== TASK SECTION ===== */
+.task-section {
+  border-top: 1px solid #161d2b;
+  padding-top: 12px;
+}
+
+.no-task {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* ===== TASK LIST ===== */
+.task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 8px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.12s;
+  color: #cbd5e1;
+}
+
+.task-item:hover {
+  background: #111827;
+}
+
+.task-item.done {
+  color: #64748b;
+}
+
+.task-item.done .task-desc {
+  text-decoration: line-through;
+}
+
+.task-check {
+  font-size: 12px;
+  width: 18px;
+  text-align: center;
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.task-item.done .task-check {
+  color: #1d4ed8;
+}
+
+.task-desc {
+  flex: 1;
+  font-size: 13px;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  min-height: 36px;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #fff;
+  padding: 8px 14px;
+  border: 1px solid #3b82f6;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  border-color: #2563eb;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #cbd5e1;
+  padding: 7px 12px;
+  border: 1px solid #1e293b;
+}
+
+.btn-ghost:hover {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+.btn-danger {
+  background: transparent;
+  color: #94a3b8;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+}
+
+.btn-danger:hover {
+  color: #ef4444;
+  background: #1a0a0a;
+  border-color: #3f1a1a;
+}
+
+.btn-full {
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+}
+
+.btn-xs {
+  padding: 3px 7px;
+  font-size: 11px;
+}
+
+/* ===== FORMS ===== */
+form {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #0a0f1a;
+  border: 1px solid #161d2b;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
 }
 
 input {
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: none;
+  background: #0d1117;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  padding: 9px 10px;
+  font-size: 14px;
+  font-family: "DM Sans", sans-serif;
+  color: #e2e8f0;
   outline: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+  width: 100%;
+}
+
+input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+input::placeholder {
+  color: #64748b;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* ===== ACCESSIBILITY: FOCUS ===== */
+:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* ===== FIX CHROME AUTOFILL (KEEP DARK THEME) ===== */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill {
+  -webkit-text-fill-color: #e2e8f0;
+  caret-color: #e2e8f0;
+
+  /* Force your dark background */
+  box-shadow: 0 0 0px 1000px #0d1117 inset;
+
+  /* Prevent flash */
+  transition: background-color 9999s ease-in-out 0s;
 }

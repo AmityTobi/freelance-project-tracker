@@ -103,7 +103,7 @@ function App() {
   }
 
   // Toggle task completed
-  function handleToggleTask(taskId) {
+  function handleToggleTask(projectId, taskId) {
     setClients((prevState) => {
       return prevState.map((client) => {
         if (client.id !== selectedClientId) return client;
@@ -111,7 +111,7 @@ function App() {
         return {
           ...client,
           projects: client.projects.map((project) => {
-            if (project.id !== selectedProjectId) return project;
+            if (project.id !== projectId) return project;
 
             return {
               ...project,
