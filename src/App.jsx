@@ -104,6 +104,9 @@ function App() {
 
   // Toggle task completed
   function handleToggleTask(projectId, taskId) {
+    console.log("taskId received:", taskId);
+    console.log("selectedProjectId:", selectedProjectId);
+    console.log("selectedClientId:", selectedClientId);
     setClients((prevState) => {
       return prevState.map((client) => {
         if (client.id !== selectedClientId) return client;

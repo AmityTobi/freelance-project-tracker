@@ -1,9 +1,10 @@
 import { useState } from "react";
+import ClientItem from "./ClientItem.jsx";
 import ClientForm from "./ClientForm.jsx";
+import ProjectList from "../Projects/ProjectList.jsx";
 import ProjectForm from "../Projects/ProjectForm.jsx";
-import TaskForm from "../Tasks/TaskForm.jsx";
 
-export default function Client({
+export default function ClientList({
   clients,
   onAddClient,
   onSelectClient,
@@ -46,21 +47,14 @@ export default function Client({
             <p className="empty-hint">No clients yet.</p>
           ) : (
             <ul className="client-list">
-              {clients.map((item) => {
-                const isSelected = item.id === selectedId;
-                return (
-                  <li
-                    key={item.id}
-                    onClick={() => onSelectClient(item.id)}
-                    className={`client-item ${isSelected ? "active" : ""}`}
-                  >
-                    <span className="client-avatar">
-                      {item.fullName.charAt(0).toUpperCase()}
-                    </span>
-                    <span className="client-name">{item.fullName}</span>
-                  </li>
-                );
-              })}
+              {clients.map((item) => (
+                <ClientItem
+                  key={item.id}
+                  client={item}
+                  isSelected={item.id === selectedId}
+                  onSelectClient={onSelectClient}
+                />
+              ))}
             </ul>
           )}
 
@@ -106,88 +100,16 @@ export default function Client({
                 />
               )}
 
-              {/* PROJECTS */}
-              {selectedClient.projects.length === 0 ? (
-                <p className="empty-hint">No projects yet. Add one above.</p>
-              ) : (
-                <ul className="project-list">
-                  {selectedClient.projects.map((project) => (
-                    <li key={project.id} className="project-card">
-                      {/* PROJECT HEADER */}
-                      <div className="project-header">
-                        <h3 className="project-title">{project.title}</h3>
-                        <div className="project-actions">
-                          <button
-                            className="btn btn-ghost btn-sm"
-                            onClick={() => onSelectProject(project.id)}
-                          >
-                            + Task
-                          </button>
-                          {onDeleteProject && (
-                            <button
-                              className="btn btn-danger btn-sm"
-                              onClick={() => onDeleteProject(project.id)}
-                            >
-                              Delete
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* TASKS */}
-                      <div className="task-section">
-                        {project.tasks.length === 0 ? (
-                          <p className="no-task">No tasks yet</p>
-                        ) : (
-                          <>
-                            <div
-                              className="section-label"
-                              style={{ marginBottom: "6px" }}
-                            >
-                              {project.tasks.length === 1 ? "Task" : "Tasks"}
-                            </div>
-                            <ul className="task-list">
-                              {project.tasks.map((task) => (
-                                <li
-                                  key={task.id}
-                                  className={`task-item ${task.completed ? "done" : ""}`}
-                                  onClick={() =>
-                                    onToggleTask(project.id, task.id)
-                                  }
-                                >
-                                  <span className="task-check">
-                                    {task.completed ? "✓" : "○"}
-                                  </span>
-                                  <span className="task-desc">{task.desc}</span>
-                                  {onDeleteTask && (
-                                    <button
-                                      className="btn btn-danger btn-xs"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        onDeleteTask(project.id, task.id);
-                                      }}
-                                    >
-                                      ✕
-                                    </button>
-                                  )}
-                                </li>
-                              ))}
-                            </ul>
-                          </>
-                        )}
-                      </div>
-
-                      {/* TASK FORM */}
-                      {project.id === activeProjectId && (
-                        <TaskForm
-                          onAddTask={onAddTask}
-                          onClose={() => onSelectProject(project.id)}
-                        />
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              )}
+              {/* PROJECT LIST */}
+              <ProjectList
+                projects={selectedClient.projects}
+                activeProjectId={activeProjectId}
+                onSelectProject={onSelectProject}
+                onAddTask={onAddTask}
+                onToggleTask={onToggleTask}
+                onDeleteTask={onDeleteTask}
+                onDeleteProject={onDeleteProject}
+              />
             </>
           )}
         </section>
