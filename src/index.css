@@ -433,3 +433,15 @@ textarea:-webkit-autofill {
   /* Prevent flash */
   transition: background-color 9999s ease-in-out 0s;
 }
+
+/* ===== VALIDATION ===== */
+.error-text {
+  font-size: 11px;
+  color: #ef4444;
+  margin-top: 2px;
+  margin-bottom: 4px;
+}
+
+input.input-error {
+  border-color: #ef4444;
+}
