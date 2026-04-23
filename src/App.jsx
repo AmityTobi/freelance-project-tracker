@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Client from "./components/Clients/ClientList";
 
 function App() {
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState(() => {
+    const data = localStorage.getItem("clients");
+    return data ? JSON.parse(data) : [];
+  });
   const [selectedClientId, setSelectedClientId] = useState(null);
 
   // Check active projectId & never resets to null
@@ -18,6 +21,11 @@ function App() {
   const selectedClient = clients.find(
     (client) => client.id === selectedClientId,
   );
+
+  // Persist Data
+  useEffect(() => {
+    localStorage.setItem("clients", JSON.stringify(clients));
+  }, [clients]);
 
   // Add Client
   function handleAddClient(clientData) {
@@ -104,9 +112,6 @@ function App() {
 
   // Toggle task completed
   function handleToggleTask(projectId, taskId) {
-    console.log("taskId received:", taskId);
-    console.log("selectedProjectId:", selectedProjectId);
-    console.log("selectedClientId:", selectedClientId);
     setClients((prevState) => {
       return prevState.map((client) => {
         if (client.id !== selectedClientId) return client;
