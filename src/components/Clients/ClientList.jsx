@@ -20,6 +20,9 @@ export default function ClientList({
   onToggleTask,
   onDeleteTask,
   onDeleteProject,
+  isLoading,
+  error,
+  onDeleteClient,
 }) {
   const [isAdding, setIsAdding] = useState(false);
 
@@ -53,6 +56,7 @@ export default function ClientList({
                   client={item}
                   isSelected={item.id === selectedId}
                   onSelectClient={onSelectClient}
+                  onDeleteClient={onDeleteClient}
                 />
               ))}
             </ul>
@@ -63,7 +67,12 @@ export default function ClientList({
           </button>
 
           {isAdding && (
-            <ClientForm onAddClient={onAddClient} onClose={handleCloseForm} />
+            <ClientForm
+              onAddClient={onAddClient}
+              handleCloseForm={handleCloseForm}
+              isLoading={isLoading}
+              isError={error}
+            />
           )}
         </aside>
 

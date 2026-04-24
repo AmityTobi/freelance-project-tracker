@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { validateTitle } from "../../util/validation.js";
 
 export default function ProjectForm({ onAddProject, onClose }) {
@@ -17,7 +18,7 @@ export default function ProjectForm({ onAddProject, onClose }) {
       return;
     }
 
-    setError("");
+    setError(null);
     onAddProject(projectData);
     onClose();
 

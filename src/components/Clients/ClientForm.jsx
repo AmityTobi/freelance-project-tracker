@@ -1,7 +1,13 @@
 import { useState } from "react";
+
 import { validateEmail, validateFullName } from "../../util/validation.js";
 
-export default function ClientForm({ onAddClient, onClose }) {
+export default function ClientForm({
+  onAddClient,
+  handleCloseForm,
+  isLoading,
+  isError,
+}) {
   const [error, setError] = useState({});
 
   function handleSubmit(event) {
@@ -23,8 +29,8 @@ export default function ClientForm({ onAddClient, onClose }) {
     }
 
     setError({});
-    onAddClient(data);
-    onClose();
+    onAddClient(data, handleCloseForm);
+
     event.target.reset();
   }
 
@@ -62,8 +68,11 @@ export default function ClientForm({ onAddClient, onClose }) {
       />
       {error.email && <p className="error-text">{error.email}</p>}
 
-      <button type="submit">Submit</button>
-      <button type="button" onClick={onClose}>
+      {isError && <div className="async-error">⚠️ {isError}</div>}
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? "Adding..." : "Submit"}
+      </button>
+      <button type="button" onClick={handleCloseForm}>
         Cancel
       </button>
     </form>

@@ -18,7 +18,7 @@ export default function TaskForm({ onAddTask, onClose }) {
       return;
     }
 
-    setError("");
+    setError(null);
     onAddTask(taskData);
     onClose();
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-import Client from "./components/Clients/ClientList";
+import Client from "./components/Clients/ClientList.jsx";
+import { saveClient } from "./util/api.js";
 
 function App() {
   const [clients, setClients] = useState(() => {
@@ -18,6 +19,10 @@ function App() {
   // Handling Project Form state
   const [isAddingProject, setIsAddingProject] = useState(false);
 
+  //Handling Async
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const selectedClient = clients.find(
     (client) => client.id === selectedClientId,
   );
@@ -28,15 +33,43 @@ function App() {
   }, [clients]);
 
   // Add Client
-  function handleAddClient(clientData) {
-    setClients((prevState) => [
-      ...prevState,
-      {
-        id: crypto.randomUUID(),
-        ...clientData, //Client data from form
-        projects: [],
-      },
-    ]);
+  async function handleAddClient(clientData, onSuccess) {
+    try {
+      setError(null);
+      setIsLoading(true);
+
+      await saveClient(clientData);
+
+      setClients((prevState) => [
+        ...prevState,
+        {
+          id: crypto.randomUUID(),
+          ...clientData, //Client data from form
+          projects: [],
+        },
+      ]);
+
+      setIsLoading(false);
+      onSuccess(); // Closes the form
+    } catch (error) {
+      setError(error.message);
+      setIsLoading(false);
+
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
+    }
+  }
+
+  //Delete Client
+  function handleDeleteClient(clientId) {
+    setClients((prevState) =>
+      prevState.filter((client) => client.id !== clientId),
+    );
+
+    if (clientId === selectedClientId) {
+      setSelectedClientId(null);
+    }
   }
 
   // Add Project to Client
@@ -188,6 +221,7 @@ function App() {
         clients={clients}
         onAddClient={handleAddClient}
         onSelectClient={handleSelectClient}
+        onDeleteClient={handleDeleteClient}
         selectedId={selectedClientId}
         selectedClient={selectedClient}
         onAddProject={handleAddProject}
@@ -200,6 +234,8 @@ function App() {
         onToggleTask={handleToggleTask}
         onDeleteTask={handleDeleteTask}
         onDeleteProject={handleDeleteProject}
+        isLoading={isLoading}
+        error={error}
       />
     </>
   );

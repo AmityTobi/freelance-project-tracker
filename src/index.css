@@ -427,7 +427,7 @@ textarea:-webkit-autofill {
   -webkit-text-fill-color: #e2e8f0;
   caret-color: #e2e8f0;
 
-  /* Force your dark background */
+  /* Force dark background */
   box-shadow: 0 0 0px 1000px #0d1117 inset;
 
   /* Prevent flash */
@@ -444,4 +444,24 @@ textarea:-webkit-autofill {
 
 input.input-error {
   border-color: #ef4444;
+}
+
+.async-error {
+  font-size: 12px;
+  color: #ef4444;
+  background: #1a0a0a;
+  border: 1px solid #2d0f0f;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+/* ===== CLIENT DELETE BUTTON ===== */
+.client-delete {
+  margin-left: auto;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.client-item:hover .client-delete {
+  opacity: 1;
 }
