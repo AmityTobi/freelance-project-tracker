@@ -1,5 +1,8 @@
+import { useRef } from "react";
+
 import TaskList from "../Tasks/TaskList.jsx";
 import TaskForm from "../Tasks/TaskForm.jsx";
+import Modal from "../UI/Modal.jsx";
 
 export default function ProjectItem({
   project,
@@ -10,8 +13,24 @@ export default function ProjectItem({
   onDeleteTask,
   onDeleteProject,
 }) {
+  const modalRef = useRef();
+
+  function showModal() {
+    modalRef.current.show();
+  }
+
   return (
     <li className="project-card">
+      <Modal
+        ref={modalRef}
+        onConfirm={() => {
+          onDeleteProject(project.id);
+          modalRef.current.close();
+        }}
+        onCancel={() => modalRef.current.close()}
+        message="Are you sure you want to delete the Project?"
+      />
+
       {/* PROJECT HEADER */}
       <div className="project-header">
         <h3 className="project-title">{project.title}</h3>
@@ -23,10 +42,7 @@ export default function ProjectItem({
             + Task
           </button>
           {onDeleteProject && (
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={() => onDeleteProject(project.id)}
-            >
+            <button className="btn btn-danger btn-sm" onClick={showModal}>
               Delete
             </button>
           )}

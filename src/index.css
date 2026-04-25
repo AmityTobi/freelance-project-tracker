@@ -465,3 +465,35 @@ input.input-error {
 .client-item:hover .client-delete {
   opacity: 1;
 }
+
+/* ===== MODAL ===== */
+dialog {
+  background: #0d1117;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  padding: 24px;
+  width: 360px;
+  color: #e2e8f0;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+}
+
+.modal-message {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
