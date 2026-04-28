@@ -33,31 +33,32 @@ function App() {
   }, [clients]);
 
   // Add Client
-  async function handleAddClient(clientData, onSuccess) {
+  async function handleAddClient(clientData, onSuccess, addOptimisticClients) {
+    //Update UI immediately
+    addOptimisticClients({
+      id: crypto.randomUUID(),
+      ...clientData,
+      projects: [],
+    });
+
+    onSuccess(); // Close form immediately
+
     try {
       setError(null);
-      setIsLoading(true);
-
       await saveClient(clientData);
-
-      setClients((prevState) => [
-        ...prevState,
-        {
-          id: crypto.randomUUID(),
-          ...clientData, //Client data from form
-          projects: [],
-        },
-      ]);
-
-      setIsLoading(false);
-      onSuccess(); // Closes the form
+      setClients((prev) => {
+        return [
+          ...prev,
+          {
+            id: crypto.randomUUID(),
+            ...clientData,
+            projects: [],
+          },
+        ];
+      });
     } catch (error) {
       setError(error.message);
-      setIsLoading(false);
-
-      setTimeout(() => {
-        setError(null);
-      }, 2000);
+      setTimeout(() => setError(null), 2000);
     }
   }
 

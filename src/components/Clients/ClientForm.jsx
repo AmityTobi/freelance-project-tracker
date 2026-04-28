@@ -6,7 +6,7 @@ export default function ClientForm({
   onAddClient,
   handleCloseForm,
   isLoading,
-  isError,
+  addOptimisticClients,
 }) {
   const [error, setError] = useState({});
 
@@ -29,7 +29,7 @@ export default function ClientForm({
     }
 
     setError({});
-    onAddClient(data, handleCloseForm);
+    onAddClient(data, handleCloseForm, addOptimisticClients);
 
     event.target.reset();
   }
@@ -68,7 +68,6 @@ export default function ClientForm({
       />
       {error.email && <p className="error-text">{error.email}</p>}
 
-      {isError && <div className="async-error">⚠️ {isError}</div>}
       <button type="submit" disabled={isLoading}>
         {isLoading ? "Adding..." : "Submit"}
       </button>

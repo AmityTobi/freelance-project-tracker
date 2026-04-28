@@ -16,12 +16,13 @@ export default function Modal({ onConfirm, onCancel, message, ref }) {
   });
 
   return (
-    <dialog ref={dialogRef}>
+    <dialog ref={dialogRef} onCancel={onCancel}>
       <p className="modal-message">{message}</p>
       <div className="modal-actions">
         <button
           className="btn btn-ghost"
           type="button"
+          autoFocus
           onClick={(e) => {
             e.stopPropagation();
             onCancel();

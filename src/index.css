@@ -453,6 +453,7 @@ input.input-error {
   border: 1px solid #2d0f0f;
   border-radius: 6px;
   padding: 8px 10px;
+  margin-bottom: 8px;
 }
 
 /* ===== CLIENT DELETE BUTTON ===== */
@@ -496,4 +497,9 @@ dialog::backdrop {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+}
+
+dialog button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useOptimistic, useState } from "react";
 import ClientItem from "./ClientItem.jsx";
 import ClientForm from "./ClientForm.jsx";
 import ProjectList from "../Projects/ProjectList.jsx";
@@ -25,6 +25,10 @@ export default function ClientList({
   onDeleteClient,
 }) {
   const [isAdding, setIsAdding] = useState(false);
+  const [optimisticClients, addOptimisticClients] = useOptimistic(
+    clients,
+    (prevState, newClient) => [...prevState, newClient],
+  );
 
   function handleOpenForm() {
     setIsAdding(true);
@@ -46,11 +50,11 @@ export default function ClientList({
         <aside className="client-section">
           <div className="section-label">Clients</div>
 
-          {clients.length === 0 ? (
+          {optimisticClients.length === 0 ? (
             <p className="empty-hint">No clients yet.</p>
           ) : (
             <ul className="client-list">
-              {clients.map((item) => (
+              {optimisticClients.map((item) => (
                 <ClientItem
                   key={item.id}
                   client={item}
@@ -61,6 +65,7 @@ export default function ClientList({
               ))}
             </ul>
           )}
+          {error && <p className="async-error">⚠️ {error}</p>}
 
           <button className="btn btn-ghost btn-full" onClick={handleOpenForm}>
             + Add client
@@ -71,7 +76,7 @@ export default function ClientList({
               onAddClient={onAddClient}
               handleCloseForm={handleCloseForm}
               isLoading={isLoading}
-              isError={error}
+              addOptimisticClients={addOptimisticClients}
             />
           )}
         </aside>
