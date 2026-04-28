@@ -1,40 +1,74 @@
 # Freelance Project Tracker
 
-This is a **personal practice project** built while learning React.
+A client and project management dashboard built from scratch while learning React.
 
-I am currently working through _React – The Complete Guide by Maximilian Schwarzmüller_, and this project is part of my effort to **apply the concepts by building something from scratch**, not just following along.
-
-## 🚀 What it does (so far)
-
-- Add and manage clients
-- Select a client to view their projects
-- Add projects to specific clients
-- Dynamic UI updates based on state
-
-## 🧠 What I’m practicing
-
-- React state management (`useState`)
-- Lifting state up
-- Prop drilling
-- Conditional rendering
-- Handling forms & user input
-- Updating nested state (clients → projects)
-
-## 🚧 Status
-
-Work in progress — currently building:
-
-- Task management (projects → tasks)
-- More interactivity and features
-
-## 🛠️ Tech Stack
-
-- React
-- JavaScript (ES6+)
-- CSS
+This is a **practice project** built alongside _React – The Complete Guide by Maximilian Schwarzmüller_, but with my own features, architecture decisions, and problem-solving — not a course follow-along.
 
 ---
 
-This project is part of my journey to become job-ready in frontend development by building real-world applications and strengthening my understanding of React.
+## 🚀 What It Does
 
-This repository will be updated continuously as I improve the app and add more features.
+Freelancers can use this app to:
+
+- Add and manage clients
+- Assign projects to specific clients
+- Break projects down into tasks
+- Mark tasks as complete (with strikethrough)
+- Delete tasks, projects, or entire clients — all with confirmation modals
+- See changes reflected instantly in the UI (optimistic updates)
+
+---
+
+## 🧠 React Concepts Applied
+
+- `useState` — managing clients, projects, tasks, and UI state
+- `useEffect` — persisting data to localStorage on every state change
+- `useRef` + `useImperativeHandle` — controlling native `<dialog>` modals from parent components
+- `useOptimistic` — instant UI feedback before server confirms, with automatic rollback on failure
+- Nested immutable state updates — updating `clients → projects → tasks` without mutation
+- Derived state — computing selected client from `selectedClientId`
+- Prop drilling — intentional data flow before introducing Context
+- Lifting state up — shared state lives at the right level
+- Conditional rendering — empty states, loading, error messages
+- Blur-based form validation — custom `util/validation.js` with reusable validators
+- Async/loading states — fake API simulation with random failures and error handling
+- Component splitting — `ClientList`, `ClientItem`, `ProjectList`, `ProjectItem`, `TaskList`, `TaskItem`
+
+---
+
+## 💡 Hardest Part
+
+Managing **three levels of nested state** (`clients → projects → tasks`) immutably was the biggest challenge. Every update required chaining `.map()` calls to find the right client, then the right project, then the right task — without mutating anything.
+
+Deleting an active client or project also required cleanup — resetting `selectedClientId` or `selectedProjectId` back to `null` to avoid stale references in the UI.
+
+---
+
+## 🛠️ Tech Stack
+
+- React 19
+- JavaScript (ES6+)
+- CSS (global stylesheet with custom design tokens)
+- LocalStorage for persistence
+
+---
+
+## 🌟 Planned Improvements
+
+- Search and filter clients
+- Progress bar per project (% tasks completed)
+- Project status (active / completed)
+- CSS Modules for scoped styles
+- Context API to replace prop drilling
+- Redux for larger scale state management practice
+
+---
+
+## 📌 Status
+
+Feature-complete MVP. Currently refactoring and cleaning up the codebase.
+
+---
+
+> Built as part of my journey to become job-ready in frontend development.
+> Every feature was reasoned through from scratch — not copied from tutorials.
