@@ -1,6 +1,7 @@
 import { useRef } from "react";
 
 import Modal from "../UI/Modal.jsx";
+import Button from "../UI/Button.jsx";
 
 export default function ClientItem({
   client,
@@ -32,15 +33,17 @@ export default function ClientItem({
         {client.fullName.charAt(0).toUpperCase()}
       </span>
       <span className="client-name">{client.fullName}</span>
-      <button
-        className="btn btn-danger btn-xs client-delete"
+
+      <Button
+        variant="danger"
+        className="btn-xs client-delete"
         onClick={(e) => {
           e.stopPropagation();
           showModal();
         }}
       >
         ✕
-      </button>
+      </Button>
     </li>
   );
 }

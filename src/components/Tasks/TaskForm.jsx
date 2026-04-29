@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 import { validateDesc } from "../../util/validation";
+import Input from "../UI/Input.jsx";
+import Button from "../UI/Button.jsx";
 
 export default function TaskForm({ onAddTask, onClose }) {
   const [error, setError] = useState("");
@@ -27,24 +29,22 @@ export default function TaskForm({ onAddTask, onClose }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="desc">Description</label>
-      <input
+      <Input
+        label="Description"
         type="text"
         id="desc"
-        name="desc"
-        className={error ? "input-error" : ""}
+        error={error}
         onChange={() => setError(null)}
         onBlur={(e) => {
           const error = validateDesc(e.target.value);
           setError(error);
         }}
       />
-      {error && <p className="error-text">{error}</p>}
 
-      <button type="submit">Submit</button>
-      <button type="button" onClick={onClose}>
+      <Button type="submit">Submit</Button>
+      <Button type="button" onClick={onClose}>
         Cancel
-      </button>
+      </Button>
     </form>
   );
 }

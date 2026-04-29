@@ -3,6 +3,7 @@ import { useRef } from "react";
 import TaskList from "../Tasks/TaskList.jsx";
 import TaskForm from "../Tasks/TaskForm.jsx";
 import Modal from "../UI/Modal.jsx";
+import Button from "../UI/Button.jsx";
 
 export default function ProjectItem({
   project,
@@ -35,16 +36,18 @@ export default function ProjectItem({
       <div className="project-header">
         <h3 className="project-title">{project.title}</h3>
         <div className="project-actions">
-          <button
-            className="btn btn-ghost btn-sm"
+          <Button
+            variant="ghost"
+            className="btn-sm"
             onClick={() => onSelectProject(project.id)}
           >
             + Task
-          </button>
+          </Button>
+
           {onDeleteProject && (
-            <button className="btn btn-danger btn-sm" onClick={showModal}>
+            <Button variant="danger" className="btn-sm" onClick={showModal}>
               Delete
-            </button>
+            </Button>
           )}
         </div>
       </div>

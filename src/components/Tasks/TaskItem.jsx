@@ -1,5 +1,7 @@
 import { useRef } from "react";
+
 import Modal from "../UI/Modal";
+import Button from "../UI/Button";
 
 export default function TaskItem({
   task,
@@ -32,15 +34,16 @@ export default function TaskItem({
       <span className="task-desc">{task.desc}</span>
 
       {onDeleteTask && (
-        <button
-          className="btn btn-danger btn-xs"
+        <Button
+          variant="danger"
+          className="btn-xs"
           onClick={(e) => {
             e.stopPropagation();
             showModal();
           }}
         >
           ✕
-        </button>
+        </Button>
       )}
     </li>
   );

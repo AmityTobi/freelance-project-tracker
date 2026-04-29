@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 import { validateTitle } from "../../util/validation.js";
+import Input from "../UI/Input.jsx";
+import Button from "../UI/Button.jsx";
 
 export default function ProjectForm({ onAddProject, onClose }) {
   const [error, setError] = useState("");
@@ -27,24 +29,22 @@ export default function ProjectForm({ onAddProject, onClose }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="title">Title</label>
-      <input
-        type="text"
-        name="title"
+      <Input
+        label="Title"
         id="title"
-        className={error ? "input-error" : ""}
+        type="text"
+        error={error}
         onChange={() => setError(null)}
         onBlur={(e) => {
           const error = validateTitle(e.target.value);
           setError(error);
         }}
       />
-      {error && <p className="error-text">{error}</p>}
 
-      <button type="submit">Submit</button>
-      <button type="button" onClick={onClose}>
+      <Button type="submit">Submit</Button>
+      <Button type="button" onClick={onClose}>
         Cancel
-      </button>
+      </Button>
     </form>
   );
 }

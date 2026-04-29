@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 import { validateEmail, validateFullName } from "../../util/validation.js";
+import Input from "../UI/Input.jsx";
+import Button from "../UI/Button.jsx";
 
 export default function ClientForm({
   onAddClient,
@@ -36,12 +38,11 @@ export default function ClientForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="fullName">Name</label>
-      <input
-        type="text"
+      <Input
+        label="Name"
         id="fullName"
-        name="fullName"
-        className={error.fullName ? "input-error" : ""}
+        type="text"
+        error={error.fullName}
         onChange={() =>
           setError((prevState) => ({ ...prevState, fullName: null }))
         }
@@ -50,14 +51,12 @@ export default function ClientForm({
           setError((prevState) => ({ ...prevState, fullName: error }));
         }}
       />
-      {error.fullName && <p className="error-text">{error.fullName}</p>}
 
-      <label htmlFor="email">Email</label>
-      <input
-        type="email"
-        name="email"
+      <Input
+        label="Email"
         id="email"
-        className={error.email ? "input-error" : ""}
+        type="email"
+        error={error.email}
         onChange={() =>
           setError((prevState) => ({ ...prevState, email: null }))
         }
@@ -66,14 +65,12 @@ export default function ClientForm({
           setError((prevState) => ({ ...prevState, email: error }));
         }}
       />
-      {error.email && <p className="error-text">{error.email}</p>}
-
-      <button type="submit" disabled={isLoading}>
+      <Button type="submit" disabled={isLoading}>
         {isLoading ? "Adding..." : "Submit"}
-      </button>
-      <button type="button" onClick={handleCloseForm}>
+      </Button>
+      <Button type="button" onClick={handleCloseForm}>
         Cancel
-      </button>
+      </Button>
     </form>
   );
 }

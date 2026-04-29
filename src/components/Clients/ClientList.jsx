@@ -3,6 +3,7 @@ import ClientItem from "./ClientItem.jsx";
 import ClientForm from "./ClientForm.jsx";
 import ProjectList from "../Projects/ProjectList.jsx";
 import ProjectForm from "../Projects/ProjectForm.jsx";
+import Button from "../UI/Button.jsx";
 
 export default function ClientList({
   clients,
@@ -67,9 +68,9 @@ export default function ClientList({
           )}
           {error && <p className="async-error">⚠️ {error}</p>}
 
-          <button className="btn btn-ghost btn-full" onClick={handleOpenForm}>
+          <Button variant="ghost" className="btn-full" onClick={handleOpenForm}>
             + Add client
-          </button>
+          </Button>
 
           {isAdding && (
             <ClientForm
@@ -101,9 +102,7 @@ export default function ClientList({
                   <div className="section-label">Selected client</div>
                   <h2 className="client-heading">{selectedClient.fullName}</h2>
                 </div>
-                <button className="btn btn-primary" onClick={onOpenProjectForm}>
-                  + Add project
-                </button>
+                <Button onClick={onOpenProjectForm}>+ Add project</Button>
               </div>
 
               {/* PROJECT FORM */}
