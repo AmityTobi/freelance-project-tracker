@@ -1,11 +1,12 @@
-import { useState } from "react";
-
 import { validateTitle } from "../../util/validation.js";
 import Input from "../UI/Input.jsx";
 import Button from "../UI/Button.jsx";
+import { useForm } from "../../hooks/useForm.js";
 
 export default function ProjectForm({ onAddProject, onClose }) {
-  const [error, setError] = useState("");
+  const { errors, handleBlur, handleChange, validate } = useForm({
+    title: validateTitle,
+  });
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -13,14 +14,8 @@ export default function ProjectForm({ onAddProject, onClose }) {
     const fd = new FormData(event.target);
     const projectData = Object.fromEntries(fd.entries());
 
-    const titleError = validateTitle(projectData.title);
+    if (!validate(projectData)) return;
 
-    if (titleError) {
-      setError(titleError);
-      return;
-    }
-
-    setError(null);
     onAddProject(projectData);
     onClose();
 
@@ -33,11 +28,10 @@ export default function ProjectForm({ onAddProject, onClose }) {
         label="Title"
         id="title"
         type="text"
-        error={error}
-        onChange={() => setError(null)}
+        error={errors.title}
+        onChange={() => handleChange("title")}
         onBlur={(e) => {
-          const error = validateTitle(e.target.value);
-          setError(error);
+          handleBlur("title", e.target.value);
         }}
       />
 

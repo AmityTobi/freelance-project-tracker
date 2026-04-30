@@ -1,8 +1,7 @@
-import { useState } from "react";
-
 import { validateEmail, validateFullName } from "../../util/validation.js";
 import Input from "../UI/Input.jsx";
 import Button from "../UI/Button.jsx";
+import { useForm } from "../../hooks/useForm.js";
 
 export default function ClientForm({
   onAddClient,
@@ -10,7 +9,10 @@ export default function ClientForm({
   isLoading,
   addOptimisticClients,
 }) {
-  const [error, setError] = useState({});
+  const { errors, handleBlur, handleChange, validate } = useForm({
+    fullName: validateFullName,
+    email: validateEmail,
+  });
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -18,19 +20,8 @@ export default function ClientForm({
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
-    const emailError = validateEmail(data.email);
-    const fullNameError = validateFullName(data.fullName);
+    if (!validate(data)) return;
 
-    if (emailError || fullNameError) {
-      setError({
-        email: emailError,
-        fullName: fullNameError,
-      });
-
-      return;
-    }
-
-    setError({});
     onAddClient(data, handleCloseForm, addOptimisticClients);
 
     event.target.reset();
@@ -42,29 +33,20 @@ export default function ClientForm({
         label="Name"
         id="fullName"
         type="text"
-        error={error.fullName}
-        onChange={() =>
-          setError((prevState) => ({ ...prevState, fullName: null }))
-        }
-        onBlur={(e) => {
-          const error = validateFullName(e.target.value);
-          setError((prevState) => ({ ...prevState, fullName: error }));
-        }}
+        error={errors.fullName}
+        onChange={() => handleChange("fullName")}
+        onBlur={(e) => handleBlur("fullName", e.target.value)}
       />
 
       <Input
         label="Email"
         id="email"
         type="email"
-        error={error.email}
-        onChange={() =>
-          setError((prevState) => ({ ...prevState, email: null }))
-        }
-        onBlur={(e) => {
-          const error = validateEmail(e.target.value);
-          setError((prevState) => ({ ...prevState, email: error }));
-        }}
+        error={errors.email}
+        onChange={() => handleChange("email")}
+        onBlur={(e) => handleBlur("email", e.target.value)}
       />
+
       <Button type="submit" disabled={isLoading}>
         {isLoading ? "Adding..." : "Submit"}
       </Button>

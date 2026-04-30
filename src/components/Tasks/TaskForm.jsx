@@ -1,11 +1,12 @@
-import { useState } from "react";
-
 import { validateDesc } from "../../util/validation";
 import Input from "../UI/Input.jsx";
 import Button from "../UI/Button.jsx";
+import { useForm } from "../../hooks/useForm.js";
 
 export default function TaskForm({ onAddTask, onClose }) {
-  const [error, setError] = useState("");
+  const { validate, handleBlur, handleChange, errors } = useForm({
+    desc: validateDesc,
+  });
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -13,14 +14,8 @@ export default function TaskForm({ onAddTask, onClose }) {
     const fd = new FormData(event.target);
     const taskData = Object.fromEntries(fd.entries());
 
-    const descError = validateDesc(taskData.desc);
+    if (!validate(taskData)) return;
 
-    if (descError) {
-      setError(descError);
-      return;
-    }
-
-    setError(null);
     onAddTask(taskData);
     onClose();
 
@@ -33,12 +28,9 @@ export default function TaskForm({ onAddTask, onClose }) {
         label="Description"
         type="text"
         id="desc"
-        error={error}
-        onChange={() => setError(null)}
-        onBlur={(e) => {
-          const error = validateDesc(e.target.value);
-          setError(error);
-        }}
+        error={errors.desc}
+        onChange={() => handleChange("desc")}
+        onBlur={(e) => handleBlur("desc", e.target.value)}
       />
 
       <Button type="submit">Submit</Button>
