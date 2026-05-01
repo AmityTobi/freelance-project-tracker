@@ -1,4 +1,5 @@
 import { useImperativeHandle, useRef } from "react";
+import { createPortal } from "react-dom";
 
 export default function Modal({ onConfirm, onCancel, message, ref }) {
   const dialogRef = useRef();
@@ -15,7 +16,7 @@ export default function Modal({ onConfirm, onCancel, message, ref }) {
     };
   });
 
-  return (
+  return createPortal(
     <dialog ref={dialogRef} onCancel={onCancel}>
       <p className="modal-message">{message}</p>
       <div className="modal-actions">
@@ -41,6 +42,7 @@ export default function Modal({ onConfirm, onCancel, message, ref }) {
           Delete
         </button>
       </div>
-    </dialog>
+    </dialog>,
+    document.getElementById("modal-root"),
   );
 }
