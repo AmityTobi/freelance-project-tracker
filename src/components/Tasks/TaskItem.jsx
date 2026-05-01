@@ -2,13 +2,11 @@ import { useRef } from "react";
 
 import Modal from "../UI/Modal";
 import Button from "../UI/Button";
+import { useAppContext } from "../../store/AppContext";
 
-export default function TaskItem({
-  task,
-  projectId,
-  onToggleTask,
-  onDeleteTask,
-}) {
+export default function TaskItem({ task, projectId }) {
+  const { onToggleTask, onDeleteTask } = useAppContext();
+
   const modalRef = useRef();
 
   function showModal() {
@@ -33,18 +31,16 @@ export default function TaskItem({
       <span className="task-check">{task.completed ? "✓" : "○"}</span>
       <span className="task-desc">{task.desc}</span>
 
-      {onDeleteTask && (
-        <Button
-          variant="danger"
-          className="btn-xs"
-          onClick={(e) => {
-            e.stopPropagation();
-            showModal();
-          }}
-        >
-          ✕
-        </Button>
-      )}
+      <Button
+        variant="danger"
+        className="btn-xs"
+        onClick={(e) => {
+          e.stopPropagation();
+          showModal();
+        }}
+      >
+        ✕
+      </Button>
     </li>
   );
 }

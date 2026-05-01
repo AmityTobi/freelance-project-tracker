@@ -2,13 +2,11 @@ import { useRef } from "react";
 
 import Modal from "../UI/Modal.jsx";
 import Button from "../UI/Button.jsx";
+import { useAppContext } from "../../store/AppContext.jsx";
 
-export default function ClientItem({
-  client,
-  isSelected,
-  onSelectClient,
-  onDeleteClient,
-}) {
+export default function ClientItem({ client, isSelected }) {
+  const { onSelectClient, onDeleteClient } = useAppContext();
+
   const modalRef = useRef();
 
   function showModal() {

@@ -1,30 +1,22 @@
 import { useOptimistic, useState } from "react";
+
+import { useAppContext } from "../../store/AppContext.jsx";
 import ClientItem from "./ClientItem.jsx";
 import ClientForm from "./ClientForm.jsx";
 import ProjectList from "../Projects/ProjectList.jsx";
 import ProjectForm from "../Projects/ProjectForm.jsx";
 import Button from "../UI/Button.jsx";
 
-export default function ClientList({
-  clients,
-  onAddClient,
-  onSelectClient,
-  selectedId,
-  selectedClient,
-  onAddProject,
-  isAddingProject,
-  onOpenProjectForm,
-  onCloseProjectForm,
-  onSelectProject,
-  activeProjectId,
-  onAddTask,
-  onToggleTask,
-  onDeleteTask,
-  onDeleteProject,
-  isLoading,
-  error,
-  onDeleteClient,
-}) {
+export default function ClientList() {
+  const {
+    clients,
+    selectedClient,
+    selectedClientId,
+    onOpenProjectForm,
+    isAddingProject,
+    error,
+  } = useAppContext();
+
   const [isAdding, setIsAdding] = useState(false);
   const [optimisticClients, addOptimisticClients] = useOptimistic(
     clients,
@@ -59,9 +51,7 @@ export default function ClientList({
                 <ClientItem
                   key={item.id}
                   client={item}
-                  isSelected={item.id === selectedId}
-                  onSelectClient={onSelectClient}
-                  onDeleteClient={onDeleteClient}
+                  isSelected={item.id === selectedClientId}
                 />
               ))}
             </ul>
@@ -74,10 +64,8 @@ export default function ClientList({
 
           {isAdding && (
             <ClientForm
-              onAddClient={onAddClient}
-              handleCloseForm={handleCloseForm}
-              isLoading={isLoading}
               addOptimisticClients={addOptimisticClients}
+              handleCloseForm={handleCloseForm}
             />
           )}
         </aside>
@@ -106,23 +94,10 @@ export default function ClientList({
               </div>
 
               {/* PROJECT FORM */}
-              {isAddingProject && (
-                <ProjectForm
-                  onAddProject={onAddProject}
-                  onClose={onCloseProjectForm}
-                />
-              )}
+              {isAddingProject && <ProjectForm />}
 
               {/* PROJECT LIST */}
-              <ProjectList
-                projects={selectedClient.projects}
-                activeProjectId={activeProjectId}
-                onSelectProject={onSelectProject}
-                onAddTask={onAddTask}
-                onToggleTask={onToggleTask}
-                onDeleteTask={onDeleteTask}
-                onDeleteProject={onDeleteProject}
-              />
+              <ProjectList />
             </>
           )}
         </section>

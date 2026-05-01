@@ -1,9 +1,13 @@
+import { useForm } from "../../hooks/useForm.js";
 import { validateTitle } from "../../util/validation.js";
+
 import Input from "../UI/Input.jsx";
 import Button from "../UI/Button.jsx";
-import { useForm } from "../../hooks/useForm.js";
+import { useAppContext } from "../../store/AppContext.jsx";
 
-export default function ProjectForm({ onAddProject, onClose }) {
+export default function ProjectForm() {
+  const { onAddProject, onCloseProjectForm } = useAppContext();
+
   const { errors, handleBlur, handleChange, validate } = useForm({
     title: validateTitle,
   });
@@ -17,7 +21,7 @@ export default function ProjectForm({ onAddProject, onClose }) {
     if (!validate(projectData)) return;
 
     onAddProject(projectData);
-    onClose();
+    onCloseProjectForm();
 
     event.target.reset();
   }
@@ -36,7 +40,7 @@ export default function ProjectForm({ onAddProject, onClose }) {
       />
 
       <Button type="submit">Submit</Button>
-      <Button type="button" onClick={onClose}>
+      <Button type="button" onClick={onCloseProjectForm}>
         Cancel
       </Button>
     </form>

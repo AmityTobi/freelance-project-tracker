@@ -1,9 +1,13 @@
+import { useAppContext } from "../../store/AppContext.jsx";
+import { useForm } from "../../hooks/useForm.js";
 import { validateDesc } from "../../util/validation";
+
 import Input from "../UI/Input.jsx";
 import Button from "../UI/Button.jsx";
-import { useForm } from "../../hooks/useForm.js";
 
-export default function TaskForm({ onAddTask, onClose }) {
+export default function TaskForm({ onClose }) {
+  const { onAddTask } = useAppContext();
+
   const { validate, handleBlur, handleChange, errors } = useForm({
     desc: validateDesc,
   });

@@ -1,11 +1,6 @@
 import TaskItem from "./TaskItem.jsx";
 
-export default function TaskList({
-  tasks,
-  projectId,
-  onToggleTask,
-  onDeleteTask,
-}) {
+export default function TaskList({ tasks, projectId }) {
   if (tasks.length === 0) {
     return <p className="no-task">No tasks yet</p>;
   }
@@ -17,13 +12,7 @@ export default function TaskList({
       </div>
       <ul className="task-list">
         {tasks.map((task) => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            projectId={projectId}
-            onToggleTask={onToggleTask}
-            onDeleteTask={onDeleteTask}
-          />
+          <TaskItem key={task.id} task={task} projectId={projectId} />
         ))}
       </ul>
     </>
