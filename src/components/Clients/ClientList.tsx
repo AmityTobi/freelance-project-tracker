@@ -1,6 +1,6 @@
 import { useOptimistic, useState } from "react";
 
-import { useAppContext } from "../../store/AppContext.jsx";
+import { useAppContext } from "../../store/AppContext.js";
 import ClientItem from "./ClientItem.jsx";
 import ClientForm from "./ClientForm.jsx";
 import ProjectList from "../Projects/ProjectList.jsx";

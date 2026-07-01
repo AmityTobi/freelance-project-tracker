@@ -1,5 +1,5 @@
-import { AppProvider } from "./store/AppContext.jsx";
-import ClientList from "./components/Clients/ClientList.jsx";
+import { AppProvider } from "./store/AppContext";
+import ClientList from "./components/Clients/ClientList";
 
 function App() {
   return (
