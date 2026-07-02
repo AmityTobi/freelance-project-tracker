@@ -1,6 +1,7 @@
 import { useOptimistic, useState } from "react";
 
-import { useAppContext } from "../../store/AppContext.js";
+import { Client } from "../../types/client";
+import { useAppContext } from "../../store/AppContext";
 import ClientItem from "./ClientItem.jsx";
 import ClientForm from "./ClientForm.jsx";
 import ProjectList from "../Projects/ProjectList.jsx";
@@ -20,7 +21,7 @@ export default function ClientList() {
   const [isAdding, setIsAdding] = useState(false);
   const [optimisticClients, addOptimisticClients] = useOptimistic(
     clients,
-    (prevState, newClient) => [...prevState, newClient],
+    (prevState, newClient: Client) => [...prevState, newClient],
   );
 
   function handleOpenForm() {

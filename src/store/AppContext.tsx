@@ -1,28 +1,63 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-import { saveClient } from "../util/api.js";
+import { Client, ClientData, TaskData, ProjectData } from "../types/client";
+import { saveClient } from "../util/api";
 
-const AppContext = createContext();
+interface AppProviderProps {
+  children: React.ReactNode;
+}
 
-export function AppProvider({ children }) {
-  const [clients, setClients] = useState(() => {
+interface AppContextProps {
+  clients: Client[];
+  selectedClient: Client | undefined;
+  selectedClientId: string | null;
+  activeProjectId: string | null;
+  selectedProjectId: string | null;
+  isAddingProject: boolean;
+  isLoading: boolean;
+  error: string | null;
+
+  onAddClient: (
+    clientData: ClientData,
+    onSuccess: () => void,
+    addOptimisticClients: (client: Client) => void,
+  ) => Promise<void>;
+
+  onDeleteClient: (clientId: string) => void;
+  onSelectClient: (id: string) => void;
+  onAddProject: (projectData: ProjectData) => void;
+  onDeleteProject: (projectId: string) => void;
+  onOpenProjectForm: () => void;
+  onCloseProjectForm: () => void;
+  onSelectProject: (id: string) => void;
+  onAddTask: (taskData: TaskData) => void;
+  onToggleTask: (projectId: string, taskId: string) => void;
+  onDeleteTask: (projectId: string, taskId: string) => void;
+}
+
+const AppContext = createContext<AppContextProps | undefined>(undefined);
+
+export function AppProvider({ children }: AppProviderProps) {
+  const [clients, setClients] = useState<Client[]>(() => {
     const data = localStorage.getItem("clients");
     return data ? JSON.parse(data) : [];
   });
-  const [selectedClientId, setSelectedClientId] = useState(null);
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
 
   // Check active projectId & never resets to null
-  const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
+    null,
+  );
 
   // Toggles open/closed
-  const [activeProjectId, setActiveProjectId] = useState(null);
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
 
   // Handling Project Form state
   const [isAddingProject, setIsAddingProject] = useState(false);
 
   //Handling Async
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const selectedClient = clients.find(
     (client) => client.id === selectedClientId,
@@ -34,13 +69,18 @@ export function AppProvider({ children }) {
   }, [clients]);
 
   // Add Client
-  async function handleAddClient(clientData, onSuccess, addOptimisticClients) {
-    //Update UI immediately
-    addOptimisticClients({
+  async function handleAddClient(
+    clientData: ClientData,
+    onSuccess: () => void,
+    addOptimisticClients: (client: Client) => void,
+  ) {
+    const newClient: Client = {
       id: crypto.randomUUID(),
       ...clientData,
       projects: [],
-    });
+    };
+    //Update UI immediately
+    addOptimisticClients(newClient);
 
     onSuccess(); // Close form immediately
 
@@ -48,23 +88,20 @@ export function AppProvider({ children }) {
       setError(null);
       await saveClient(clientData);
       setClients((prev) => {
-        return [
-          ...prev,
-          {
-            id: crypto.randomUUID(),
-            ...clientData,
-            projects: [],
-          },
-        ];
+        return [...prev, newClient];
       });
     } catch (error) {
-      setError(error.message);
-      setTimeout(() => setError(null), 2000);
+      if (error instanceof Error) {
+        setError(error.message);
+        setTimeout(() => setError(null), 2000);
+      } else {
+        setError("Something went wrong.");
+      }
     }
   }
 
   //Delete Client
-  function handleDeleteClient(clientId) {
+  function handleDeleteClient(clientId: string) {
     setClients((prevState) =>
       prevState.filter((client) => client.id !== clientId),
     );
@@ -75,7 +112,7 @@ export function AppProvider({ children }) {
   }
 
   // Add Project to Client
-  function handleAddProject(projectData) {
+  function handleAddProject(projectData: ProjectData) {
     setClients((prevState) =>
       prevState.map((client) => {
         if (client.id === selectedClientId) {
@@ -95,7 +132,7 @@ export function AppProvider({ children }) {
   }
 
   //Delete Project
-  function handleDeleteProject(projectId) {
+  function handleDeleteProject(projectId: string) {
     setClients((prevState) =>
       prevState.map((client) => {
         if (client.id === selectedClientId) {
@@ -122,7 +159,7 @@ export function AppProvider({ children }) {
   }
 
   // Add Task to project
-  function handleAddTask(taskData) {
+  function handleAddTask(taskData: TaskData) {
     setClients((prevState) => {
       return prevState.map((client) => {
         if (client.id !== selectedClientId) return client;
@@ -146,7 +183,7 @@ export function AppProvider({ children }) {
   }
 
   // Toggle task completed
-  function handleToggleTask(projectId, taskId) {
+  function handleToggleTask(projectId: string, taskId: string) {
     setClients((prevState) => {
       return prevState.map((client) => {
         if (client.id !== selectedClientId) return client;
@@ -174,7 +211,7 @@ export function AppProvider({ children }) {
   }
 
   // Delete task
-  function handleDeleteTask(projectId, taskId) {
+  function handleDeleteTask(projectId: string, taskId: string) {
     setClients((prevState) => {
       return prevState.map((client) => {
         if (client.id !== selectedClientId) return client;
@@ -195,13 +232,13 @@ export function AppProvider({ children }) {
   }
 
   // Set client-ID
-  function handleSelectClient(id) {
+  function handleSelectClient(id: string) {
     setSelectedClientId(id);
     setIsAddingProject(false);
   }
 
   // Toggle Task-Form display
-  function handleSelectTaskId(id) {
+  function handleSelectTaskId(id: string) {
     setSelectedProjectId(id);
 
     activeProjectId === id ? setActiveProjectId(null) : setActiveProjectId(id);
@@ -248,5 +285,11 @@ export function AppProvider({ children }) {
 
 //useContext custom hook
 export function useAppContext() {
-  return useContext(AppContext);
+  const context = useContext(AppContext);
+
+  if (!context) {
+    throw new Error("useAppContext must be used within an AppProvider");
+  }
+
+  return context;
 }
