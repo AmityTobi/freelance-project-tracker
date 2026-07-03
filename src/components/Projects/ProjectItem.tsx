@@ -1,18 +1,24 @@
 import { useRef } from "react";
 
-import TaskList from "../Tasks/TaskList.jsx";
-import TaskForm from "../Tasks/TaskForm.jsx";
-import Modal from "../UI/Modal.jsx";
-import Button from "../UI/Button.jsx";
-import { useAppContext } from "../../store/AppContext.jsx";
+import TaskList from "../Tasks/TaskList";
+import TaskForm from "../Tasks/TaskForm";
+import Modal from "../UI/Modal";
+import Button from "../UI/Button";
+import { useAppContext } from "../../store/AppContext";
+import { ModalHandle } from "../UI/Modal";
+import { Project } from "../../types/client";
 
-export default function ProjectItem({ project }) {
+interface ProjectItemProps {
+  project: Project;
+}
+
+export default function ProjectItem({ project }: ProjectItemProps) {
   const { activeProjectId, onSelectProject, onDeleteProject } = useAppContext();
 
-  const modalRef = useRef();
+  const modalRef = useRef<ModalHandle>(null);
 
   function showModal() {
-    modalRef.current.show();
+    modalRef.current?.show();
   }
 
   return (
@@ -21,9 +27,9 @@ export default function ProjectItem({ project }) {
         ref={modalRef}
         onConfirm={() => {
           onDeleteProject(project.id);
-          modalRef.current.close();
+          modalRef.current?.close();
         }}
-        onCancel={() => modalRef.current.close()}
+        onCancel={() => modalRef.current?.close()}
         message="Are you sure you want to delete the Project?"
       />
 
