@@ -1,4 +1,4 @@
-import { useAppContext } from "../../store/AppContext.jsx";
+import { useAppContext } from "../../store/AppContext.js";
 import ProjectItem from "./ProjectItem.jsx";
 
 export default function ProjectList() {

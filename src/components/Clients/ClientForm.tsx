@@ -1,8 +1,8 @@
 import { validateEmail, validateFullName } from "../../util/validation.js";
 import Input from "../UI/Input.jsx";
-import Button from "../UI/Button.jsx";
+import Button from "../UI/Button.js";
 import { useForm } from "../../hooks/useForm.js";
-import { useAppContext } from "../../store/AppContext.jsx";
+import { useAppContext } from "../../store/AppContext.js";
 
 export default function ClientForm({ handleCloseForm, addOptimisticClients }) {
   const { onAddClient, isLoading } = useAppContext();

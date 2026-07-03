@@ -2,8 +2,8 @@ import { useForm } from "../../hooks/useForm.js";
 import { validateTitle } from "../../util/validation.js";
 
 import Input from "../UI/Input.jsx";
-import Button from "../UI/Button.jsx";
-import { useAppContext } from "../../store/AppContext.jsx";
+import Button from "../UI/Button.js";
+import { useAppContext } from "../../store/AppContext.js";
 
 export default function ProjectForm() {
   const { onAddProject, onCloseProjectForm } = useAppContext();

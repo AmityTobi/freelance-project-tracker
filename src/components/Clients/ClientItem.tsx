@@ -1,8 +1,8 @@
 import { useRef } from "react";
 
 import Modal from "../UI/Modal.jsx";
-import Button from "../UI/Button.jsx";
-import { useAppContext } from "../../store/AppContext.jsx";
+import Button from "../UI/Button.js";
+import { useAppContext } from "../../store/AppContext.js";
 
 export default function ClientItem({ client, isSelected }) {
   const { onSelectClient, onDeleteClient } = useAppContext();
