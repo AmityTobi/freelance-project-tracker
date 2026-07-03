@@ -1,83 +1,116 @@
 # Freelance Project Tracker
 
-A client and project management dashboard built from scratch while learning React.
+A client and project management dashboard built with **React 19** and **TypeScript**.
 
-This is a **practice project** built alongside _React – The Complete Guide by Maximilian Schwarzmüller_, but with my own features, architecture decisions, and problem-solving — not a course follow-along.
+This project was built independently as a way to apply and reinforce React concepts learned through React – The Complete Guide by Maximilian Schwarzmüller. Rather than following a tutorial step by step, I designed and implemented the application myself, making my own architectural decisions and later migrating the entire codebase from JavaScript to TypeScript for stronger type safety and maintainability.
 
-🔗 **[Live Demo](https://freelance-project-tracker.netlify.app/)**
+🔗 **Live Demo:** https://freelance-project-tracker.netlify.app/
 
-## 🚀 What It Does
+---
 
-Freelancers can use this app to:
+## 🚀 Features
 
 - Add and manage clients
-- Assign projects to specific clients
-- Break projects down into tasks
-- Mark tasks as complete (with strikethrough)
-- Delete tasks, projects, or entire clients — all with confirmation modals
-- See changes reflected instantly in the UI (optimistic updates)
-- Data persists across page refreshes via LocalStorage
+- Create multiple projects for each client
+- Add tasks to projects
+- Mark tasks as complete
+- Delete tasks, projects, and clients with confirmation modals
+- Optimistic UI updates when adding clients
+- Client data persists using LocalStorage
+- Reusable form validation across multiple forms
 
 ---
 
-## 🧠 React Concepts Applied
-
-- `useState` — managing clients, projects, tasks, and UI state
-- `useEffect` — persisting data to localStorage on every state change
-- `useRef` + `useImperativeHandle` — controlling native `<dialog>` modals from parent components
-- `useOptimistic` — instant UI feedback before server confirms, with automatic rollback on failure
-- `useContext` + custom `useAppContext` hook — eliminated prop drilling across 6 component levels
-- `createPortal` — rendering modals outside the component tree into `#modal-root`
-- Custom `useForm` hook — reusable form validation logic shared across all forms
-- Reusable `Input` and `Button` components — consistent UI primitives across the app
-- Nested immutable state updates — updating `clients → projects → tasks` without mutation
-- Derived state — computing selected client from `selectedClientId`
-- Lifting state up — shared state lives at the right level
-- Conditional rendering — empty states, loading, error messages
-- Blur-based form validation — custom `util/validation.js` with reusable validators
-- Async/loading states — fake API simulation with random failures and error handling
-- Component splitting — `ClientList`, `ClientItem`, `ProjectList`, `ProjectItem`, `TaskList`, `TaskItem`
-
----
-
-## 💡 Hardest Part
-
-Managing **three levels of nested state** (`clients → projects → tasks`) immutably was the biggest challenge. Every update required chaining `.map()` calls to find the right client, then the right project, then the right task — without mutating anything.
-
-Deleting an active client or project also required cleanup — resetting `selectedClientId` or `selectedProjectId` back to `null` to avoid stale references in the UI.
-
-Building a custom `useForm` hook and `useContext` architecture from scratch also reinforced how React's composition model works at a deeper level.
-
----
-
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
 - React 19
-- JavaScript (ES6+)
-- CSS (global stylesheet with custom design tokens)
-- LocalStorage for persistence
+- TypeScript
+- Vite
+- CSS
+- LocalStorage
 
 ---
 
-## 🌟 Planned Improvements
+## 🧠 React Concepts Used
 
-- Search and filter clients
-- Progress bar per project (% tasks completed)
-- Project status (active / completed)
-- CSS Modules for scoped styles
-- Redux for larger scale state management practice
+### State Management
+
+- `useState`
+- `useEffect`
+- `useContext`
+- Custom `useAppContext`
+
+### Forms
+
+- Custom `useForm` hook
+- Reusable validation functions
+- Blur validation
+
+### Performance & UX
+
+- `useOptimistic`
+- Optimistic UI updates
+- Loading states
+- Error handling
+
+### Refs & Portals
+
+- `useRef`
+- `useImperativeHandle`
+- `createPortal`
+- Native `<dialog>` element
+
+### Component Architecture
+
+- Reusable Button component
+- Reusable Input component
+- Reusable Modal component
+- Strongly typed reusable interfaces
+- Shared domain models (`Client`, `Project`, `Task`)
+
+### TypeScript
+
+- Interfaces
+- Type aliases
+- Utility types (`Omit`, `Record`)
+- Generic custom hooks
+- React event typing
+- Strongly typed Context API
+- Typed API utilities
+
+---
+
+## 💡 Challenges
+
+Some of the more interesting engineering challenges included:
+
+- Building a reusable `useForm` hook that works with multiple forms using TypeScript generics.
+- Migrating an existing JavaScript React project to TypeScript.
+- Designing reusable domain models (`Client`, `Project`, `Task`) that could be shared across the application.
+- Managing deeply nested immutable state updates.
+- Building a reusable modal API using `useImperativeHandle`.
+- Implementing optimistic UI updates while handling asynchronous failures gracefully.
+
+---
+
+## 🌱 Future Improvements
+
+- Search clients
+- Filter projects
+- Project progress indicator
+- Due dates
+- Drag-and-drop task ordering
+- Backend integration
+- Mobile responsiveness
 
 ---
 
 ## 📌 Status
 
-Feature-complete MVP. Deployed on Netlify.
+- ✅ Feature complete
+- ✅ Fully migrated from JavaScript to TypeScript
+- ✅ Production build passing
 
 ---
 
-> Built as part of my journey to become job-ready in frontend development.
-> Every feature was reasoned through from scratch — not copied from tutorials.
-
----
-
-> **Note:** This app is optimized for desktop. Mobile support is not a current priority as dashboard layouts are inherently desktop-first.
+Built as part of my frontend engineering journey, with a focus on writing reusable, maintainable, and type-safe React applications.
