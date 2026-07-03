@@ -1,11 +1,12 @@
 import { useOptimistic, useState } from "react";
 
-import { useAppContext } from "../../store/AppContext.jsx";
-import ClientItem from "./ClientItem.jsx";
-import ClientForm from "./ClientForm.jsx";
-import ProjectList from "../Projects/ProjectList.jsx";
-import ProjectForm from "../Projects/ProjectForm.jsx";
-import Button from "../UI/Button.jsx";
+import { Client } from "../../types/client";
+import { useAppContext } from "../../store/AppContext";
+import ClientItem from "./ClientItem";
+import ClientForm from "./ClientForm";
+import ProjectList from "../Projects/ProjectList";
+import ProjectForm from "../Projects/ProjectForm";
+import Button from "../UI/Button";
 
 export default function ClientList() {
   const {
@@ -20,7 +21,7 @@ export default function ClientList() {
   const [isAdding, setIsAdding] = useState(false);
   const [optimisticClients, addOptimisticClients] = useOptimistic(
     clients,
-    (prevState, newClient) => [...prevState, newClient],
+    (prevState, newClient: Client) => [...prevState, newClient],
   );
 
   function handleOpenForm() {
@@ -47,11 +48,11 @@ export default function ClientList() {
             <p className="empty-hint">No clients yet.</p>
           ) : (
             <ul className="client-list">
-              {optimisticClients.map((item) => (
+              {optimisticClients.map((client) => (
                 <ClientItem
-                  key={item.id}
-                  client={item}
-                  isSelected={item.id === selectedClientId}
+                  key={client.id}
+                  client={client}
+                  isSelected={client.id === selectedClientId}
                 />
               ))}
             </ul>

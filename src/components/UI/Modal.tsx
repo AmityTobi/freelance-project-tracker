@@ -1,20 +1,35 @@
 import { useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
 
-export default function Modal({ onConfirm, onCancel, message, ref }) {
-  const dialogRef = useRef();
+export interface ModalHandle {
+  show: () => void;
+  close: () => void;
+}
 
-  useImperativeHandle(ref, () => {
-    return {
-      show: () => {
-        dialogRef.current.showModal();
-      },
+export interface ModalProps {
+  onConfirm: () => void;
+  onCancel: () => void;
+  message: string;
+  ref: React.Ref<ModalHandle>;
+}
 
-      close: () => {
-        dialogRef.current.close();
-      },
-    };
-  });
+export default function Modal({
+  onConfirm,
+  onCancel,
+  message,
+  ref,
+}: ModalProps) {
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    show() {
+      dialogRef.current?.showModal();
+    },
+
+    close() {
+      dialogRef.current?.close();
+    },
+  }));
 
   return createPortal(
     <dialog ref={dialogRef} onCancel={onCancel}>
@@ -24,7 +39,7 @@ export default function Modal({ onConfirm, onCancel, message, ref }) {
           className="btn btn-ghost"
           type="button"
           autoFocus
-          onClick={(e) => {
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation();
             onCancel();
           }}
@@ -34,7 +49,7 @@ export default function Modal({ onConfirm, onCancel, message, ref }) {
         <button
           className="btn btn-danger"
           type="button"
-          onClick={(e) => {
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation();
             onConfirm();
           }}
@@ -43,6 +58,6 @@ export default function Modal({ onConfirm, onCancel, message, ref }) {
         </button>
       </div>
     </dialog>,
-    document.getElementById("modal-root"),
+    document.getElementById("modal-root")!,
   );
 }

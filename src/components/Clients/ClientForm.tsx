@@ -1,10 +1,19 @@
-import { validateEmail, validateFullName } from "../../util/validation.js";
-import Input from "../UI/Input.jsx";
-import Button from "../UI/Button.jsx";
-import { useForm } from "../../hooks/useForm.js";
-import { useAppContext } from "../../store/AppContext.jsx";
+import { validateEmail, validateFullName } from "../../util/validation";
+import { Client, ClientData } from "../../types/client";
+import Input from "../UI/Input";
+import Button from "../UI/Button";
+import { useForm } from "../../hooks/useForm";
+import { useAppContext } from "../../store/AppContext";
 
-export default function ClientForm({ handleCloseForm, addOptimisticClients }) {
+interface ClientFormProps {
+  handleCloseForm: () => void;
+  addOptimisticClients: (action: Client) => void;
+}
+
+export default function ClientForm({
+  handleCloseForm,
+  addOptimisticClients,
+}: ClientFormProps) {
   const { onAddClient, isLoading } = useAppContext();
 
   const { errors, handleBlur, handleChange, validate } = useForm({
@@ -12,11 +21,11 @@ export default function ClientForm({ handleCloseForm, addOptimisticClients }) {
     email: validateEmail,
   });
 
-  function handleSubmit(event) {
+  function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
+    const data = Object.fromEntries(formData.entries()) as ClientData;
 
     if (!validate(data)) return;
 
@@ -33,7 +42,9 @@ export default function ClientForm({ handleCloseForm, addOptimisticClients }) {
         type="text"
         error={errors.fullName}
         onChange={() => handleChange("fullName")}
-        onBlur={(e) => handleBlur("fullName", e.target.value)}
+        onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
+          handleBlur("fullName", e.target.value)
+        }
       />
 
       <Input
@@ -42,7 +53,9 @@ export default function ClientForm({ handleCloseForm, addOptimisticClients }) {
         type="email"
         error={errors.email}
         onChange={() => handleChange("email")}
-        onBlur={(e) => handleBlur("email", e.target.value)}
+        onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
+          handleBlur("email", e.target.value)
+        }
       />
 
       <Button type="submit" disabled={isLoading}>

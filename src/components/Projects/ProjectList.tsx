@@ -1,15 +1,15 @@
-import { useAppContext } from "../../store/AppContext.jsx";
-import ProjectItem from "./ProjectItem.jsx";
+import { useAppContext } from "../../store/AppContext";
+import ProjectItem from "./ProjectItem";
 
 export default function ProjectList() {
   const { selectedClient } = useAppContext();
-  if (selectedClient.projects.length === 0) {
+  if (selectedClient?.projects.length === 0) {
     return <p className="empty-hint">No projects yet. Add one above.</p>;
   }
 
   return (
     <ul className="project-list">
-      {selectedClient.projects.map((project) => (
+      {selectedClient?.projects.map((project) => (
         <ProjectItem key={project.id} project={project} />
       ))}
     </ul>

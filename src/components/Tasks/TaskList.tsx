@@ -1,6 +1,13 @@
-import TaskItem from "./TaskItem.jsx";
+import TaskItem from "./TaskItem";
 
-export default function TaskList({ tasks, projectId }) {
+import { Task } from "../../types/client";
+
+interface TaskListProps {
+  projectId: string;
+  tasks: Task[];
+}
+
+export default function TaskList({ tasks, projectId }: TaskListProps) {
   if (tasks.length === 0) {
     return <p className="no-task">No tasks yet</p>;
   }

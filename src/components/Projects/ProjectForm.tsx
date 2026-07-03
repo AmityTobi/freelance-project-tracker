@@ -1,9 +1,11 @@
-import { useForm } from "../../hooks/useForm.js";
-import { validateTitle } from "../../util/validation.js";
+import { useForm } from "../../hooks/useForm";
 
-import Input from "../UI/Input.jsx";
-import Button from "../UI/Button.jsx";
-import { useAppContext } from "../../store/AppContext.jsx";
+import { validateTitle } from "../../util/validation";
+import { ProjectData } from "../../types/client";
+
+import Input from "../UI/Input";
+import Button from "../UI/Button";
+import { useAppContext } from "../../store/AppContext";
 
 export default function ProjectForm() {
   const { onAddProject, onCloseProjectForm } = useAppContext();
@@ -12,11 +14,11 @@ export default function ProjectForm() {
     title: validateTitle,
   });
 
-  function handleSubmit(event) {
+  function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const fd = new FormData(event.target);
-    const projectData = Object.fromEntries(fd.entries());
+    const projectData = Object.fromEntries(fd.entries()) as ProjectData;
 
     if (!validate(projectData)) return;
 
@@ -34,7 +36,7 @@ export default function ProjectForm() {
         type="text"
         error={errors.title}
         onChange={() => handleChange("title")}
-        onBlur={(e) => {
+        onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
           handleBlur("title", e.target.value);
         }}
       />
