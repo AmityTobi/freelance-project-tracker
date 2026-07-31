@@ -1,6 +1,13 @@
-import { Client, ClientData, Project, ProjectData, Task, TaskData } from "../types/client";
+import {
+  Client,
+  ClientData,
+  Project,
+  ProjectData,
+  Task,
+  TaskData,
+} from "../types/client";
 
-const BASE_URL = "http://localhost:3001/api";
+const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001/api";
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${BASE_URL}${url}`, {
