@@ -1,0 +1,29 @@
+{
+  "clients": [
+    {
+      "id": "94ad8ae8-2654-411c-97c1-6445a6d86c56",
+      "fullName": "Amity Ekoyi",
+      "email": "a@gmail.com",
+      "projects": [
+        {
+          "id": "fe31feed-4305-4f72-a419-e7e7410d75a1",
+          "title": "My first project",
+          "dueDate": "2026-07-30",
+          "tasks": [
+            {
+              "id": "06ef872a-31a1-4881-ba11-d412508e1428",
+              "title": "Testing it out",
+              "completed": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2ee47586-bc4d-42b0-88a5-8841f6d527f4",
+      "fullName": "Bode",
+      "email": "b@gmail.com",
+      "projects": []
+    }
+  ]
+}
