@@ -10,7 +10,6 @@ const FILTERS: { value: ProjectFilter; label: string }[] = [
 
 export default function ProjectFilterBar() {
   const { projectFilter, onSetProjectFilter } = useAppContext();
-
   return (
     <div className="project-filter-bar">
       {FILTERS.map((filter) => (

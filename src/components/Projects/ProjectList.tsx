@@ -10,7 +10,6 @@ interface ProjectListProps {
 
 export default function ProjectList({ clientId, projects }: ProjectListProps) {
   const { projectFilter } = useAppContext();
-
   const filteredProjects = projects.filter((project) => {
     switch (projectFilter) {
       case "active":
