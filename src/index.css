@@ -457,14 +457,176 @@ input.input-error {
 }
 
 /* ===== CLIENT DELETE BUTTON ===== */
+.client-item-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.client-item-wrapper .client-item {
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+}
+
 .client-delete {
-  margin-left: auto;
+  position: absolute;
+  right: 6px;
   opacity: 0;
   transition: opacity 0.15s;
 }
 
-.client-item:hover .client-delete {
+.client-item-wrapper:hover .client-delete {
   opacity: 1;
+}
+
+/* ===== CLIENT SEARCH ===== */
+.client-search {
+  margin-bottom: 12px;
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.progress-track {
+  flex: 1;
+  height: 6px;
+  background: #161d2b;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.progress-label {
+  font-size: 11px;
+  color: #94a3b8;
+  min-width: 32px;
+  text-align: right;
+}
+
+/* ===== DUE DATE BADGE ===== */
+.project-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.due-date-badge {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.due-date-badge.overdue {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* ===== PROJECT FILTER BAR ===== */
+.project-filter-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  background: transparent;
+  border: 1px solid #1e293b;
+  border-radius: 999px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-chip:hover {
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+.filter-chip.active {
+  background: #0f1e38;
+  border-color: #1e3a5f;
+  color: #93c5fd;
+}
+
+/* ===== DRAG HANDLE ===== */
+.drag-handle {
+  cursor: grab;
+  color: #475569;
+  font-size: 13px;
+  padding: 0 2px;
+  touch-action: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 720px) {
+  .app-layout {
+    padding: 20px 14px;
+  }
+
+  .layout-container {
+    flex-direction: column;
+  }
+
+  .client-section {
+    width: 100%;
+    position: static;
+  }
+
+  .client-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .client-header .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .project-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .project-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  dialog {
+    width: 90vw;
+    max-width: 360px;
+  }
+}
+
+@media (max-width: 420px) {
+  .app-title {
+    font-size: 15px;
+  }
+
+  .app-header {
+    gap: 8px;
+  }
 }
 
 /* ===== MODAL ===== */
