@@ -1,8 +1,8 @@
 # Freelance Project Tracker
 
-A client and project management dashboard built with **React 19** and **TypeScript**.
+A client and project management dashboard built with **React 19**, **TypeScript**, **TanStack Query**, and a lightweight **Express** backend.
 
-This project was built independently as a way to apply and reinforce React concepts learned through React – The Complete Guide by Maximilian Schwarzmüller. Rather than following a tutorial step by step, I designed and implemented the application myself, making my own architectural decisions and later migrating the entire codebase from JavaScript to TypeScript for stronger type safety and maintainability.
+This project was built independently as a way to apply and reinforce React concepts learned through React – The Complete Guide by Maximilian Schwarzmüller. Rather than following a tutorial step by step, I designed and implemented the application myself, making my own architectural decisions — first migrating the entire codebase from JavaScript to TypeScript, then later moving from local-only state to a real backend with React Router and TanStack Query for server state.
 
 🔗 **Live Demo:** https://freelance-project-tracker.netlify.app/
 
@@ -11,23 +11,38 @@ This project was built independently as a way to apply and reinforce React conce
 ## 🚀 Features
 
 - Add and manage clients
-- Create multiple projects for each client
+- Search clients by name
+- Create multiple projects for each client, with optional due dates
+- Filter projects by all / active / completed / overdue
+- Visual progress indicator per project based on completed tasks
 - Add tasks to projects
 - Mark tasks as complete
+- Reorder tasks within a project via drag-and-drop
 - Delete tasks, projects, and clients with confirmation modals
-- Optimistic UI updates when adding clients
-- Client data persists using LocalStorage
+- Optimistic UI updates across all client, project, and task actions
+- Client data persisted through a REST API backed by Express
 - Reusable form validation across multiple forms
+- Responsive layout for mobile and tablet screens
 
 ---
 
 ## 🛠 Tech Stack
 
+**Frontend**
+
 - React 19
 - TypeScript
+- React Router
+- TanStack Query
+- dnd-kit (drag-and-drop)
 - Vite
 - CSS
-- LocalStorage
+
+**Backend**
+
+- Node.js
+- Express
+- Deployed on Render
 
 ---
 
@@ -35,10 +50,16 @@ This project was built independently as a way to apply and reinforce React conce
 
 ### State Management
 
-- `useState`
-- `useEffect`
-- `useContext`
+- TanStack Query for server state (fetching, caching, optimistic mutations)
+- `useContext` for UI-only state (form visibility, filters, search)
 - Custom `useAppContext`
+- `useState`
+
+### Routing
+
+- React Router
+- Route params for client selection
+- Nested routes with a shared layout (`<Outlet />`)
 
 ### Forms
 
@@ -48,10 +69,9 @@ This project was built independently as a way to apply and reinforce React conce
 
 ### Performance & UX
 
-- `useOptimistic`
-- Optimistic UI updates
-- Loading states
-- Error handling
+- Optimistic UI updates via TanStack Query mutations
+- Loading and error states
+- Drag-and-drop with `@dnd-kit`
 
 ### Refs & Portals
 
@@ -62,9 +82,7 @@ This project was built independently as a way to apply and reinforce React conce
 
 ### Component Architecture
 
-- Reusable Button component
-- Reusable Input component
-- Reusable Modal component
+- Reusable Button, Input, Modal, and ProgressBar components
 - Strongly typed reusable interfaces
 - Shared domain models (`Client`, `Project`, `Task`)
 
@@ -75,8 +93,7 @@ This project was built independently as a way to apply and reinforce React conce
 - Utility types (`Omit`, `Record`)
 - Generic custom hooks
 - React event typing
-- Strongly typed Context API
-- Typed API utilities
+- Strongly typed Context API and API layer
 
 ---
 
@@ -84,24 +101,23 @@ This project was built independently as a way to apply and reinforce React conce
 
 Some of the more interesting engineering challenges included:
 
+- Migrating from local component state + LocalStorage to a real backend, without breaking the app's existing optimistic-UI feel.
+- Splitting state cleanly between server state (TanStack Query) and UI-only state (Context).
+- Building drag-and-drop task reordering with an optimistic update that reverts cleanly on failure.
+- Introducing routing so a client's URL is shareable, while keeping the existing sidebar/detail layout.
+- Debugging an Express route-ordering bug where a wildcard route (`/tasks/:taskId`) silently swallowed requests meant for a more specific route (`/tasks/reorder`).
 - Building a reusable `useForm` hook that works with multiple forms using TypeScript generics.
-- Migrating an existing JavaScript React project to TypeScript.
-- Designing reusable domain models (`Client`, `Project`, `Task`) that could be shared across the application.
-- Managing deeply nested immutable state updates.
-- Building a reusable modal API using `useImperativeHandle`.
-- Implementing optimistic UI updates while handling asynchronous failures gracefully.
+- Designing reusable domain models (`Client`, `Project`, `Task`) shared across the frontend and backend.
 
 ---
 
 ## 🌱 Future Improvements
 
-- Search clients
-- Filter projects
-- Project progress indicator
-- Due dates
-- Drag-and-drop task ordering
-- Backend integration
-- Mobile responsiveness
+- Drag-and-drop task movement _between_ projects (currently supports reordering within a project only)
+- Move from a JSON file to a proper database for persistent storage
+- User authentication per freelancer account
+- Task priority levels
+- Export project summaries as PDF/CSV
 
 ---
 
@@ -109,6 +125,7 @@ Some of the more interesting engineering challenges included:
 
 - ✅ Feature complete
 - ✅ Fully migrated from JavaScript to TypeScript
+- ✅ Backend integration complete
 - ✅ Production build passing
 
 ---
