@@ -8,7 +8,12 @@ import ProgressBar from "../UI/ProgressBar";
 import { useAppContext } from "../../store/AppContext";
 import { useDeleteProject } from "../../hooks/queries";
 import { Project } from "../../types/client";
-import { formatDueDate, getProjectProgress, isOverdue, isProjectComplete } from "../../util/dates";
+import {
+  formatDueDate,
+  getProjectProgress,
+  isOverdue,
+  isProjectComplete,
+} from "../../util/dates";
 
 interface ProjectItemProps {
   project: Project;
@@ -71,7 +76,11 @@ export default function ProjectItem({ project, clientId }: ProjectItemProps) {
 
       {/* TASKS */}
       <div className="task-section">
-        <TaskList tasks={project.tasks} projectId={project.id} clientId={clientId} />
+        <TaskList
+          tasks={project.tasks}
+          projectId={project.id}
+          clientId={clientId}
+        />
       </div>
 
       {/* TASK FORM */}
