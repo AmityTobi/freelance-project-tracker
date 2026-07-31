@@ -37,7 +37,9 @@ export default function ClientSidebar() {
       />
 
       {isLoading && <p className="empty-hint">Loading clients...</p>}
-      {error instanceof Error && <p className="async-error">⚠️ {error.message}</p>}
+      {error instanceof Error && (
+        <p className="async-error">⚠️ {error.message}</p>
+      )}
 
       {!isLoading && filteredClients.length === 0 && (
         <p className="empty-hint">
@@ -56,7 +58,6 @@ export default function ClientSidebar() {
       <Button variant="ghost" className="btn-full" onClick={handleOpenForm}>
         + Add client
       </Button>
-
       {isAdding && <ClientForm handleCloseForm={handleCloseForm} />}
     </aside>
   );
