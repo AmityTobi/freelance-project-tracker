@@ -144,27 +144,6 @@ app.post(
   },
 );
 
-app.patch(
-  "/api/clients/:clientId/projects/:projectId/tasks/:taskId",
-  async (req, res) => {
-    const db = await readDb();
-    const client = findClient(db, req.params.clientId);
-    const project = client && findProject(client, req.params.projectId);
-    const task = project?.tasks.find((task) => task.id === req.params.taskId);
-
-    if (!task) {
-      return res.status(404).json({ message: "Task not found" });
-    }
-
-    if (typeof req.body.completed === "boolean") {
-      task.completed = req.body.completed;
-    }
-
-    await writeDb(db);
-    res.json(task);
-  },
-);
-
 // Reorder tasks within a project (drag-and-drop)
 app.patch(
   "/api/clients/:clientId/projects/:projectId/tasks/reorder",
@@ -186,6 +165,27 @@ app.patch(
 
     await writeDb(db);
     res.json(project.tasks);
+  },
+);
+
+app.patch(
+  "/api/clients/:clientId/projects/:projectId/tasks/:taskId",
+  async (req, res) => {
+    const db = await readDb();
+    const client = findClient(db, req.params.clientId);
+    const project = client && findProject(client, req.params.projectId);
+    const task = project?.tasks.find((task) => task.id === req.params.taskId);
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    if (typeof req.body.completed === "boolean") {
+      task.completed = req.body.completed;
+    }
+
+    await writeDb(db);
+    res.json(task);
   },
 );
 
