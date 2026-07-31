@@ -1,7 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import * as api from "../api/clients";
-import { Client, ClientData, ProjectData, TaskData } from "../types/client";
+import {
+  Client,
+  ClientData,
+  Project,
+  ProjectData,
+  Task,
+  TaskData,
+} from "../types/client";
 
 const CLIENTS_KEY = ["clients"];
 
@@ -52,7 +59,24 @@ export function useDeleteClient() {
 
   return useMutation({
     mutationFn: (clientId: string) => api.deleteClient(clientId),
-    onSuccess: () => {
+
+    // Optimistic remove so the client disappears from the sidebar instantly
+    onMutate: async (clientId) => {
+      await queryClient.cancelQueries({ queryKey: CLIENTS_KEY });
+      const previous = queryClient.getQueryData<Client[]>(CLIENTS_KEY);
+
+      queryClient.setQueryData<Client[]>(CLIENTS_KEY, (old) =>
+        old?.filter((client) => client.id !== clientId),
+      );
+
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(CLIENTS_KEY, context.previous);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: CLIENTS_KEY });
     },
   });
@@ -64,7 +88,35 @@ export function useAddProject(clientId: string) {
   return useMutation({
     mutationFn: (projectData: ProjectData) =>
       api.createProject(clientId, projectData),
-    onSuccess: () => {
+
+    // Optimistic add so the new project card appears instantly
+    onMutate: async (projectData) => {
+      await queryClient.cancelQueries({ queryKey: CLIENTS_KEY });
+      const previous = queryClient.getQueryData<Client[]>(CLIENTS_KEY);
+
+      const optimisticProject: Project = {
+        id: `optimistic-${crypto.randomUUID()}`,
+        title: projectData.title,
+        dueDate: projectData.dueDate ?? null,
+        tasks: [],
+      };
+
+      queryClient.setQueryData<Client[]>(CLIENTS_KEY, (old) =>
+        old?.map((client) =>
+          client.id === clientId
+            ? { ...client, projects: [...client.projects, optimisticProject] }
+            : client,
+        ),
+      );
+
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(CLIENTS_KEY, context.previous);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: CLIENTS_KEY });
     },
   });
@@ -75,7 +127,31 @@ export function useDeleteProject(clientId: string) {
 
   return useMutation({
     mutationFn: (projectId: string) => api.deleteProject(clientId, projectId),
-    onSuccess: () => {
+
+    // Optimistic remove so the project card disappears instantly
+    onMutate: async (projectId) => {
+      await queryClient.cancelQueries({ queryKey: CLIENTS_KEY });
+      const previous = queryClient.getQueryData<Client[]>(CLIENTS_KEY);
+
+      queryClient.setQueryData<Client[]>(CLIENTS_KEY, (old) =>
+        old?.map((client) =>
+          client.id === clientId
+            ? {
+                ...client,
+                projects: client.projects.filter((p) => p.id !== projectId),
+              }
+            : client,
+        ),
+      );
+
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(CLIENTS_KEY, context.previous);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: CLIENTS_KEY });
     },
   });
@@ -87,7 +163,40 @@ export function useAddTask(clientId: string, projectId: string) {
   return useMutation({
     mutationFn: (taskData: TaskData) =>
       api.createTask(clientId, projectId, taskData),
-    onSuccess: () => {
+
+    // Optimistic add so the new task appears instantly
+    onMutate: async (taskData) => {
+      await queryClient.cancelQueries({ queryKey: CLIENTS_KEY });
+      const previous = queryClient.getQueryData<Client[]>(CLIENTS_KEY);
+
+      const optimisticTask: Task = {
+        id: `optimistic-${crypto.randomUUID()}`,
+        title: taskData.title,
+        completed: false,
+      };
+
+      queryClient.setQueryData<Client[]>(CLIENTS_KEY, (old) =>
+        old?.map((client) => {
+          if (client.id !== clientId) return client;
+          return {
+            ...client,
+            projects: client.projects.map((project) =>
+              project.id === projectId
+                ? { ...project, tasks: [...project.tasks, optimisticTask] }
+                : project,
+            ),
+          };
+        }),
+      );
+
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(CLIENTS_KEY, context.previous);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: CLIENTS_KEY });
     },
   });
@@ -145,9 +254,37 @@ export function useDeleteTask(clientId: string, projectId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (taskId: string) =>
-      api.deleteTask(clientId, projectId, taskId),
-    onSuccess: () => {
+    mutationFn: (taskId: string) => api.deleteTask(clientId, projectId, taskId),
+
+    // Optimistic remove so the task disappears instantly
+    onMutate: async (taskId) => {
+      await queryClient.cancelQueries({ queryKey: CLIENTS_KEY });
+      const previous = queryClient.getQueryData<Client[]>(CLIENTS_KEY);
+
+      queryClient.setQueryData<Client[]>(CLIENTS_KEY, (old) =>
+        old?.map((client) => {
+          if (client.id !== clientId) return client;
+          return {
+            ...client,
+            projects: client.projects.map((project) => {
+              if (project.id !== projectId) return project;
+              return {
+                ...project,
+                tasks: project.tasks.filter((task) => task.id !== taskId),
+              };
+            }),
+          };
+        }),
+      );
+
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(CLIENTS_KEY, context.previous);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: CLIENTS_KEY });
     },
   });
