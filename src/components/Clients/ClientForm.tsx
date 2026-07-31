@@ -1,20 +1,16 @@
 import { validateEmail, validateFullName } from "../../util/validation";
-import { Client, ClientData } from "../../types/client";
+import { ClientData } from "../../types/client";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
 import { useForm } from "../../hooks/useForm";
-import { useAppContext } from "../../store/AppContext";
+import { useAddClient } from "../../hooks/queries";
 
 interface ClientFormProps {
   handleCloseForm: () => void;
-  addOptimisticClients: (action: Client) => void;
 }
 
-export default function ClientForm({
-  handleCloseForm,
-  addOptimisticClients,
-}: ClientFormProps) {
-  const { onAddClient, isLoading } = useAppContext();
+export default function ClientForm({ handleCloseForm }: ClientFormProps) {
+  const { mutate: addClient, isPending, error } = useAddClient();
 
   const { errors, handleBlur, handleChange, validate } = useForm({
     fullName: validateFullName,
@@ -29,7 +25,8 @@ export default function ClientForm({
 
     if (!validate(data)) return;
 
-    onAddClient(data, handleCloseForm, addOptimisticClients);
+    addClient(data);
+    handleCloseForm();
 
     event.target.reset();
   }
@@ -58,8 +55,10 @@ export default function ClientForm({
         }
       />
 
-      <Button type="submit" disabled={isLoading}>
-        {isLoading ? "Adding..." : "Submit"}
+      {error instanceof Error && <p className="async-error">⚠️ {error.message}</p>}
+
+      <Button type="submit" disabled={isPending}>
+        {isPending ? "Adding..." : "Submit"}
       </Button>
       <Button type="button" onClick={handleCloseForm}>
         Cancel

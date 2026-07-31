@@ -1,17 +1,19 @@
-import { useAppContext } from "../../store/AppContext";
 import { useForm } from "../../hooks/useForm";
 import { validateDesc } from "../../util/validation";
 import { TaskData } from "../../types/client";
 
 import Input from "../UI/Input";
 import Button from "../UI/Button";
+import { useAddTask } from "../../hooks/queries";
 
 interface TaskFormProps {
+  clientId: string;
+  projectId: string;
   onClose: () => void;
 }
 
-export default function TaskForm({ onClose }: TaskFormProps) {
-  const { onAddTask } = useAppContext();
+export default function TaskForm({ clientId, projectId, onClose }: TaskFormProps) {
+  const { mutate: addTask, isPending } = useAddTask(clientId, projectId);
 
   const { validate, handleBlur, handleChange, errors } = useForm({
     title: validateDesc,
@@ -25,7 +27,7 @@ export default function TaskForm({ onClose }: TaskFormProps) {
 
     if (!validate(taskData)) return;
 
-    onAddTask(taskData);
+    addTask(taskData);
     onClose();
 
     event.target.reset();
@@ -44,7 +46,9 @@ export default function TaskForm({ onClose }: TaskFormProps) {
         }
       />
 
-      <Button type="submit">Submit</Button>
+      <Button type="submit" disabled={isPending}>
+        {isPending ? "Adding..." : "Submit"}
+      </Button>
       <Button type="button" onClick={onClose}>
         Cancel
       </Button>

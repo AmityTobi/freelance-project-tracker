@@ -5,10 +5,16 @@ import { ProjectData } from "../../types/client";
 
 import Input from "../UI/Input";
 import Button from "../UI/Button";
+import { useAddProject } from "../../hooks/queries";
 import { useAppContext } from "../../store/AppContext";
 
-export default function ProjectForm() {
-  const { onAddProject, onCloseProjectForm } = useAppContext();
+interface ProjectFormProps {
+  clientId: string;
+}
+
+export default function ProjectForm({ clientId }: ProjectFormProps) {
+  const { onCloseProjectForm } = useAppContext();
+  const { mutate: addProject, isPending } = useAddProject(clientId);
 
   const { errors, handleBlur, handleChange, validate } = useForm({
     title: validateTitle,
@@ -20,9 +26,9 @@ export default function ProjectForm() {
     const fd = new FormData(event.target);
     const projectData = Object.fromEntries(fd.entries()) as ProjectData;
 
-    if (!validate(projectData)) return;
+    if (!validate({ title: projectData.title })) return;
 
-    onAddProject(projectData);
+    addProject(projectData);
     onCloseProjectForm();
 
     event.target.reset();
@@ -41,7 +47,11 @@ export default function ProjectForm() {
         }}
       />
 
-      <Button type="submit">Submit</Button>
+      <Input label="Due date (optional)" id="dueDate" type="date" error={null} />
+
+      <Button type="submit" disabled={isPending}>
+        {isPending ? "Adding..." : "Submit"}
+      </Button>
       <Button type="button" onClick={onCloseProjectForm}>
         Cancel
       </Button>
