@@ -8,6 +8,7 @@ export interface Project {
   id: string;
   tasks: Task[];
   title: string;
+  dueDate: string | null;
 }
 
 export interface Client {
@@ -17,6 +18,8 @@ export interface Client {
   projects: Project[];
 }
 
-export type ProjectData = Omit<Project, "id" | "tasks">;
+export type ProjectData = { title: string; dueDate?: string };
 export type TaskData = Omit<Task, "id" | "completed">;
 export type ClientData = Omit<Client, "id" | "projects">;
+
+export type ProjectFilter = "all" | "active" | "completed" | "overdue";

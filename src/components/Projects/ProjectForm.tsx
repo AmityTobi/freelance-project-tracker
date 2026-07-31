@@ -30,7 +30,6 @@ export default function ProjectForm({ clientId }: ProjectFormProps) {
 
     addProject(projectData);
     onCloseProjectForm();
-
     event.target.reset();
   }
 
@@ -47,7 +46,12 @@ export default function ProjectForm({ clientId }: ProjectFormProps) {
         }}
       />
 
-      <Input label="Due date (optional)" id="dueDate" type="date" error={null} />
+      <Input
+        label="Due date (optional)"
+        id="dueDate"
+        type="date"
+        error={null}
+      />
 
       <Button type="submit" disabled={isPending}>
         {isPending ? "Adding..." : "Submit"}
